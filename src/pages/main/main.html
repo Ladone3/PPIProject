@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Main-page
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-main-screen">
+    <div #peopleZone class="ppi-main-screen__people">
+      <div
+        *ngFor="let person of people"
+        [style.left.px]="person.position.x"
+        [style.top.px]="person.position.y"
+        class="ppi-circle">
+        <img [src]="person.image"/>
+      </div>
+    </div>
+    <div #activitiesZone class="ppi-main-screen__activities">
+      <div
+        *ngFor="let activity of activities"
+        [style.left.px]="activity.position.x"
+        [style.top.px]="activity.position.y"
+        class="ppi-circle">
+        <img [src]="activity.image"/>
+      </div>
+    </div>
+  </div>
+</ion-content>

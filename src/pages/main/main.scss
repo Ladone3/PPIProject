@@ -1,0 +1,43 @@
+page-main {
+    .ppi-main-screen {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        box-sizing: border-box;
+    }
+    .ppi-main-screen__people {
+        background-color: #ecfbec;
+        position: relative;
+        flex-grow: 1;
+    }
+    .ppi-main-screen__activities {
+        background-color: aliceblue;
+        position: relative;
+        flex-grow: 1;
+    }
+    .ppi-circle {
+        position: absolute;
+        width: 10vh;
+        height: 10vh;
+        margin-top: - 5vh;
+        margin-left: - 5vh;
+        border-radius: 100px;
+        top: 100px;
+        left: 100px;
+        transition: 0.5;
+        border: 1px solid green;
+        overflow: hidden;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        &:hover {
+            width: 15vh;
+            height: 15vh;
+            margin-top: - 7.5vh;
+            margin-left: - 7.5vh;
+        }
+    }
+}
