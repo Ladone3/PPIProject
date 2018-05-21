@@ -31,7 +31,7 @@ export class MainPage {
     private appDataService: AppDataService,
   ) {
     Promise.all([
-      appDataService.getPeople(),
+      appDataService.getContacts(),
       appDataService.getActivities(),
     ]).then(([people, activities]) => {
       this.people = peopleToCircle(people);

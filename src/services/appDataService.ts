@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/contacts';
 import { Person, Activity } from '../models/models';
 
 @Injectable()
@@ -33,6 +34,24 @@ export class AppDataService {
                 image: 'assets/imgs/people/image4.jpg',
             },
         ]);
+    }
+
+    public getContacts(): Promise<Person[]>{
+      let persons : Person[];
+      function process(contacts) {
+        for (let i = 0; i < contacts.length; i++) {
+          const contact = contacts[i];
+          persons.push(
+            {
+              name: contact.fieldType.displayName,
+              image: contact.fieldType.photos[0],
+            }
+          );
+        }
+        return Promise.resolve(persons);
+      }
+      let fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name, navigator.contacts.fieldType.photos];
+      return process(navigator.contacts.find(fields, null, null, null));
     }
 
     public getActivities(): Promise<Activity[]> {
