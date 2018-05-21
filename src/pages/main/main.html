@@ -10,7 +10,7 @@
   <div class="ppi-main-screen">
     <div #peopleZone class="ppi-main-screen__people">
       <div
-        *ngFor="let person of people"
+        *ngFor="let person of getPeople()"
         [style.left.px]="person.position.x"
         [style.top.px]="person.position.y"
         class="ppi-circle">
@@ -19,7 +19,7 @@
     </div>
     <div #activitiesZone class="ppi-main-screen__activities">
       <div
-        *ngFor="let activity of activities"
+        *ngFor="let activity of getActivities()"
         [style.left.px]="activity.position.x"
         [style.top.px]="activity.position.y"
         class="ppi-circle">

@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Person, Activity, Point, Rect } from '../../models/models';
+import { Person, Activity, Vector, Rect } from '../../models/models';
+import { AppDataService } from '../../services/appDataService';
 
 export const MAX_SPEED = 1;
 export const DEFAULT_RADIUS = 50;
@@ -9,14 +10,9 @@ export interface Circle<Type = any> {
   title: string;
   image: string
   ref: Type;
-  position: Point;
+  position: Vector;
   direction: Vector;
 }
-
-export interface Vector {
-  dx: number;
-  dy: number;
-} 
 
 @Component({
   selector: 'page-main',
@@ -26,14 +22,17 @@ export class MainPage {
   @ViewChild('peopleZone') peopleZone: ElementRef;
   @ViewChild('activitiesZone') activitiesZone: ElementRef;
 
-  people: Circle<Person>[];
-  activities: Circle<Activity>[];
-  animation: boolean = false;
+  private people: Circle<Person>[];
+  private activities: Circle<Activity>[];
+  private animation: boolean = false;
 
-  constructor(public navCtrl: NavController) {
+  constructor(
+    public navCtrl: NavController,
+    private appDataService: AppDataService,
+  ) {
     Promise.all([
-      this.getPeople(),
-      this.getActivities(),
+      appDataService.getPeople(),
+      appDataService.getActivities(),
     ]).then(([people, activities]) => {
       this.people = peopleToCircle(people);
       this.activities = activityToCircle(activities);
@@ -41,22 +40,30 @@ export class MainPage {
     }).catch(this.showError);
   }
 
-  public redraw () {
+  public redraw() {
 
   }
 
   // Animation
   // ===========================================
-  public startAnimation () {
+  public getPeople() {
+    return this.people;
+  }
+
+  public getActivities() {
+    return this.activities;
+  }
+
+  public startAnimation() {
     this.animation = true;
     this.animationStep();
   }
 
-  public stopAnimation () {
+  public stopAnimation() {
     this.animation = false;
   }
 
-  private animationStep () {
+  private animationStep() {
     this.calcPhysics();
     this.animate();
 
@@ -75,7 +82,7 @@ export class MainPage {
     processCircles(this.people, getRectangle(this.peopleZone));
     processCircles(this.activities, getRectangle(this.activitiesZone));
 
-    function processCircles (circles: Circle[], bounds: Rect) {
+    function processCircles(circles: Circle[], bounds: Rect) {
       for (let i = 0; i < circles.length; i++) {
         const circle = circles[i];
         const pos = circle.position;
@@ -83,20 +90,20 @@ export class MainPage {
         // on initialization stage minPoint === maxPoint
         const correctBounds = bounds.width !== 0 && bounds.height !== 0;
         if (correctBounds) {
-          var minPoint: Point = {
+          var minPoint: Vector = {
             x: bounds.x + circleRadius,
             y: bounds.y + circleRadius,
           };
-          var maxPoint: Point = {
+          var maxPoint: Vector = {
             x: bounds.x + bounds.width - circleRadius,
             y: bounds.y + bounds.height - circleRadius,
           };
 
           // Check the walls
-          if (pos.x > maxPoint.x) circle.direction.dx = -Math.abs(circle.direction.dx);
-          if (pos.x < minPoint.x) circle.direction.dx = Math.abs(circle.direction.dx);
-          if (pos.y > maxPoint.y) circle.direction.dy = -Math.abs(circle.direction.dy);
-          if (pos.y < minPoint.y) circle.direction.dy = Math.abs(circle.direction.dy);
+          if (pos.x > maxPoint.x) circle.direction.x = -Math.abs(circle.direction.x);
+          if (pos.x < minPoint.x) circle.direction.x = Math.abs(circle.direction.x);
+          if (pos.y > maxPoint.y) circle.direction.y = -Math.abs(circle.direction.y);
+          if (pos.y < minPoint.y) circle.direction.y = Math.abs(circle.direction.y);
           pos.x = Math.min(Math.max(pos.x, minPoint.x), maxPoint.x);
           pos.y = Math.min(Math.max(pos.y, minPoint.y), maxPoint.y);
         }
@@ -112,7 +119,7 @@ export class MainPage {
       }
     }
 
-    function calcReflectionAngle (circle1: Circle, circle2: Circle) {
+    function calcReflectionAngle(circle1: Circle, circle2: Circle) {
       const pos1 = circle1.position;
       const pos2 = circle2.position;
       const dx = pos1.x - pos2.x;
@@ -124,14 +131,14 @@ export class MainPage {
         (r->) = (l->) - 2(n->)((l->)*(n->)/(n->)*(n->))
       */
       const n: Vector = {
-       dx: (pos1.x - pos2.x) || Math.random(),
-       dy: (pos1.y - pos2.y) || Math.random(),
+        x: (pos1.x - pos2.x) || Math.random(),
+        y: (pos1.y - pos2.y) || Math.random(),
       };
       let l;
       if (stickTogether) {
-        const nLength = Math.sqrt(Math.pow(n.dx,2) + Math.pow(n.dy,2));
-        const lLength = Math.sqrt(Math.pow(circle1.direction.dx,2) + Math.pow(circle1.direction.dy,2));
-        l = scale(n, -lLength/nLength);
+        const nLength = Math.sqrt(Math.pow(n.x, 2) + Math.pow(n.y, 2));
+        const lLength = Math.sqrt(Math.pow(circle1.direction.x, 2) + Math.pow(circle1.direction.y, 2));
+        l = scale(n, -lLength / nLength);
       } else {
         l = circle1.direction;
       }
@@ -143,98 +150,49 @@ export class MainPage {
 
       return reflectionAngle;
 
-      function sum (v1: Vector, v2: Vector): Vector {
+      function sum(v1: Vector, v2: Vector): Vector {
         return {
-          dx: v1.dx + v2.dx,
-          dy: v1.dy + v2.dy,
+          x: v1.x + v2.x,
+          y: v1.y + v2.y,
         };
       }
 
-      function deduction (v1: Vector, v2: Vector): Vector {
+      function deduction(v1: Vector, v2: Vector): Vector {
         return sum(v1, scale(v2, - 1));
       }
 
-      function scale (v1: Vector, scale: number): Vector {
+      function scale(v1: Vector, scale: number): Vector {
         return {
-          dx: v1.dx * scale,
-          dy: v1.dy * scale,
+          x: v1.x * scale,
+          y: v1.y * scale,
         };
       }
 
-      function multiplication (v1: Vector, v2: Vector): number {
-        return v1.dx * v2.dx + v1.dy * v2.dy;
+      function multiplication(v1: Vector, v2: Vector): number {
+        return v1.x * v2.x + v1.y * v2.y;
       }
     }
   }
-  
 
-  private animate () {
+
+  private animate() {
     this.people.forEach(person => moveCircle(person));
     this.activities.forEach(person => moveCircle(person));
     this.redraw();
 
-    function moveCircle (circle: Circle) {
+    function moveCircle(circle: Circle) {
       circle.position = {
-          x: circle.position.x + circle.direction.dx,
-          y: circle.position.y + circle.direction.dy,
+        x: circle.position.x + circle.direction.x,
+        y: circle.position.y + circle.direction.y,
       };
     }
   }
 
   // ===========================================
 
-  // Data retrieving
-  // ===========================================
-  private getPeople(): Promise<Person[]> {
-    return Promise.resolve([
-      {
-        name: 'John',
-        image: 'assets/imgs/image1.png',
-      },
-      {
-        name: 'Willy',
-        image: 'assets/imgs/image1.png',
-      },
-      {
-        name: 'Sam',
-        image: 'assets/imgs/image1.png',
-      },
-      {
-        name: 'Sam',
-        image: 'assets/imgs/image1.png',
-      },
-      {
-        name: 'Sam',
-        image: 'assets/imgs/image1.png',
-      },
-      {
-        name: 'Sam',
-        image: 'assets/imgs/image1.png',
-      }
-    ]);
-  }
-
-  private getActivities(): Promise<Activity[]> {
-    return Promise.resolve([
-      {
-        name: 'Sport',
-        image: 'assets/imgs/image2.png',
-      },
-      {
-        name: 'Drinking',
-        image: 'assets/imgs/image2.png',
-      },
-      // {
-      //   name: 'Chilling',
-      //   image: 'assets/imgs/image2.png',
-      // }
-    ]);
-  }
-
   private showError(error) {
     console.log(error)
   }
-  // ===========================================
 }
 
 // Utils
@@ -248,7 +206,7 @@ export function getRectangle(element: ElementRef): Rect {
   }
 }
 
-export function peopleToCircle (people: Person[]): Circle<Person>[] {
+export function peopleToCircle(people: Person[]): Circle<Person>[] {
   // we don't know the size of active zone in that point of a time
   // so we use document.body
   return people.map(person => ({
@@ -263,7 +221,7 @@ export function peopleToCircle (people: Person[]): Circle<Person>[] {
   }));
 }
 
-export function activityToCircle (activities: Activity[]): Circle<Activity>[] {
+export function activityToCircle(activities: Activity[]): Circle<Activity>[] {
   // we don't know the size of active zone in that point of a time
   // so we use document.body
   return activities.map(activity => ({
@@ -279,19 +237,19 @@ export function activityToCircle (activities: Activity[]): Circle<Activity>[] {
   }));
 }
 
-export function hitTest (circle1: Circle, circle2: Circle, radius) {
-    const pos1 = circle1.position;
-    const pos2 = circle2.position;
-    const dist = Math.sqrt(
-      Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
-    );
-    
-    return dist < (radius * 2);
+export function hitTest(circle1: Circle, circle2: Circle, radius) {
+  const pos1 = circle1.position;
+  const pos2 = circle2.position;
+  const dist = Math.sqrt(
+    Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
+  );
+
+  return dist < (radius * 2);
 }
 
-function getRandomDirection (): Vector {
-    return {
-      dx: MAX_SPEED - Math.random() * MAX_SPEED * 2,
-      dy: MAX_SPEED - Math.random() * MAX_SPEED * 2,
-    }
+function getRandomDirection(): Vector {
+  return {
+    x: MAX_SPEED - Math.random() * MAX_SPEED * 2,
+    y: MAX_SPEED - Math.random() * MAX_SPEED * 2,
+  }
 }
