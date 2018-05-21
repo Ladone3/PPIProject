@@ -1,30 +1,34 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Main-page
+      Main
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <div class="ppi-main-screen">
-    <div #peopleZone class="ppi-main-screen__people">
-      <div
-        *ngFor="let person of getPeople()"
-        [style.left.px]="person.position.x"
-        [style.top.px]="person.position.y"
-        class="ppi-circle">
-        <img [src]="person.image"/>
+
+    <div class="ppi-main-screen_people">
+      <div class="ppi-main-screen_people__button" (click)="moveToPeople()" title="People">
+        <img src="assets/imgs/activities/walking.png"/>
       </div>
     </div>
-    <div #activitiesZone class="ppi-main-screen__activities">
-      <div
-        *ngFor="let activity of getActivities()"
-        [style.left.px]="activity.position.x"
-        [style.top.px]="activity.position.y"
-        class="ppi-circle">
-        <img [src]="activity.image"/>
+
+    <div class="ppi-greating">
+        <div class="ppi-greating__circle">
+            Let's connect!
+        </div>
+    </div>
+
+    <div class="ppi-main-screen_activities">
+      <div class="ppi-main-screen_activities__button" (click)="moveToActivities()" title="Activities">
+        <img src="assets/imgs/activities/running.png"/>
       </div>
+    </div>
+
+    <div class="ppi-basket">
+        <img src="assets/imgs/business.png"/>
     </div>
   </div>
 </ion-content>

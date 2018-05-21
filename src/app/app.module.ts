@@ -4,6 +4,9 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { MainPage } from '../pages/main/main';
+import { ActivitiesPage } from '../pages/activities/activities';
+import { PeoplePage } from '../pages/people/people';
+
 import { AboutPage } from '../pages/about/about';
 import { CustomPage } from '../pages/customPage/customPage';
 import { ContactPage } from '../pages/contact/contact';
@@ -17,6 +20,9 @@ import { AppDataService } from '../services/appDataService';
 @NgModule({
   declarations: [
     MainPage,
+    ActivitiesPage,
+    PeoplePage,
+    
     MyApp,
     AboutPage,
     ContactPage,
@@ -31,6 +37,9 @@ import { AppDataService } from '../services/appDataService';
   bootstrap: [IonicApp],
   entryComponents: [
     MainPage,
+    ActivitiesPage,
+    PeoplePage,
+
     MyApp,
     AboutPage,
     ContactPage,

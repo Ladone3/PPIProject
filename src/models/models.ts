@@ -11,6 +11,7 @@ export interface Rect {
 }
 
 export interface Person {
+    id: string;
     name: string;
     image: string;
   }

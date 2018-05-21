@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Select activity
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-activities-screen">
+
+    <!-- <div #activeZone class="ppi-activities-screen__activities">
+      <div
+        *ngFor="let activity of activities"
+        [style.left.px]="positions[activity.id].x"
+        [style.top.px]="positions[activity.id].y"
+        class="ppi-circle">
+        <img [src]="activity.image"/>
+      </div>
+    </div> -->
+    <div class="ppi-activities-screen_people">
+      <!-- <div class="ppi-activities-screen_people__button">
+        <img src="assets/imgs/activities/walking.png"/>
+      </div> -->
+    </div>
+
+    <div class="ppi-greating">
+        <div class="ppi-greating__circle">
+            What do you want to do today?
+        </div>
+    </div>
+
+    <div #activeZone class="ppi-activities-screen_activities">
+      <div *ngIf="positions">
+        <div
+          *ngFor="let activity of activities"
+          [style.left.px]="positions[activity.id].x"
+          [style.top.px]="positions[activity.id].y"
+          class="ppi-circle">
+          <img [src]="activity.image"/>
+        </div>
+      </div>
+      <div #obstacle class="ppi-dnd-button">
+        Drag activity here
+      </div>
+    </div>
+
+    <div class="ppi-basket">
+        <img src="assets/imgs/business.png"/>
+    </div>
+  </div>
+</ion-content>
