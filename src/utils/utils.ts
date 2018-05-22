@@ -20,39 +20,29 @@ export interface Circle<Type = any> {
 export interface Parameters {
   curPositions: Positions;
   circles: Circle[];
-  boundingRectangle: Rect;
+  obstacleCircle: Circle<Rect>;
+  animationBounds: Rect;
 }
 
 export function moveCircles (parameters: Parameters) {
   const oldPositions = parameters.curPositions;
   const newPositions: Positions = {};
+  const bounds = parameters.animationBounds;
+  const circles = parameters.circles.concat(parameters.obstacleCircle);
+  const minPoint: Vector = { x: 0, y: 0 };
+  const maxPoint: Vector = { x: bounds.width, y: bounds.height };
 
-  const bounds = parameters.boundingRectangle;
-  const circles = parameters.circles;
-
-  // on initialization stage minPoint === maxPoint
-  const boundsIsCorrect = bounds.width !== 0 && bounds.height !== 0;
-  const minPoint: Vector = {
-    x: bounds.x,
-    y: bounds.y,
-  };
-  const maxPoint: Vector = {
-    x: bounds.x + bounds.width,
-    y: bounds.y + bounds.height,
-  };
+  // =======================================================
 
   for (let i = 0; i < circles.length; i++) {
     const circle = circles[i];
     const pos = oldPositions[circle.id];
-
     
-    if (boundsIsCorrect) {
-      // Check the walls
-      if (pos.x > maxPoint.x - circle.radius) circle.direction.x = -Math.abs(circle.direction.x);
-      if (pos.x < minPoint.x + circle.radius) circle.direction.x = Math.abs(circle.direction.x);
-      if (pos.y > maxPoint.y - circle.radius) circle.direction.y = -Math.abs(circle.direction.y);
-      if (pos.y < minPoint.y + circle.radius) circle.direction.y = Math.abs(circle.direction.y);
-    }
+    // Check the walls
+    if (pos.x > maxPoint.x - circle.radius) circle.direction.x = -Math.abs(circle.direction.x);
+    if (pos.x < minPoint.x + circle.radius) circle.direction.x = Math.abs(circle.direction.x);
+    if (pos.y > maxPoint.y - circle.radius) circle.direction.y = -Math.abs(circle.direction.y);
+    if (pos.y < minPoint.y + circle.radius) circle.direction.y = Math.abs(circle.direction.y);
 
     // Hit test with other circles
     for (let j = i + 1; j < circles.length; j++) {
@@ -63,6 +53,8 @@ export function moveCircles (parameters: Parameters) {
       }
     }
   }
+
+  // =======================================================
 
   // move circles
   circles.forEach(circle => {
@@ -157,8 +149,8 @@ export function moveCircles (parameters: Parameters) {
 
 export function getBoundingRectangle(element: ElementRef): Rect {
   return {
-    x: 0,
-    y: 0,
+    x: element.nativeElement.offsetLeft,
+    y: element.nativeElement.offsetTop,
     width: element.nativeElement.clientWidth,
     height: element.nativeElement.clientHeight,
   }

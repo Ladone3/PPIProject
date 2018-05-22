@@ -28,6 +28,7 @@
       <div *ngIf="positions">
         <div
           *ngFor="let activity of activities"
+          [id]="activity.id"
           [style.left.px]="positions[activity.id].x"
           [style.top.px]="positions[activity.id].y"
           class="ppi-circle"

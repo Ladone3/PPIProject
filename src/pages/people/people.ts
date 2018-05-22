@@ -37,7 +37,7 @@ export class PeoplePage {
     public navParams: NavParams,
   ) { }
 
-  public ionViewWillEnter() {
+  public ionViewDidEnter() {
     Promise.all([
       this.getActivity(),
       this.appDataService.getPeople(),
@@ -46,9 +46,6 @@ export class PeoplePage {
       this.activity = activity;
       this.setInitialState();
     }).catch(this.showError);
-  }
-
-  public ionViewDidEnter() {
     this.startAnimation();
   }
 
@@ -101,10 +98,17 @@ export class PeoplePage {
 
   private animationStep() {
     requestAnimationFrame(() => {
+      // update circle sizes
+      for (const circle of this.people) {
+        const nativeCircle = this.activeZone.nativeElement.querySelector('#' + circle.id);
+        circle.radius = nativeCircle.clientWidth / 2;
+      }
+
       this.positions = moveCircles({
-        circles: this.people.concat(this.obstacleCircle),
-        boundingRectangle: this.animationBounds,
+        circles: this.people,
         curPositions: this.positions,
+        animationBounds: this.animationBounds,
+        obstacleCircle: this.obstacleCircle,
       });
     });
   }

@@ -13,6 +13,7 @@
       <div *ngIf="positions">
         <div
           *ngFor="let person of people"
+          [id]="person.id"
           [style.left.px]="positions[person.id].x"
           [style.top.px]="positions[person.id].y"
           class="ppi-circle"
