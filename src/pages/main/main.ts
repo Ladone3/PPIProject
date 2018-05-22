@@ -12,7 +12,7 @@ export class MainPage {
   }
 
   public moveToActivities () {
-    this.navCtrl.push(ActivitiesPage);    
+    this.navCtrl.push(ActivitiesPage);  
   }
 
   public moveToPeople () {

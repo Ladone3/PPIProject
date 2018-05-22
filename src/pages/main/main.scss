@@ -14,101 +14,11 @@ page-main {
             justify-content: center;
             display: flex;
 
-            &__button {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 100vmin;
-                overflow: hidden;
+            .ppi-circular-button {
                 width: 40vmin;
                 height: 40vmin;
                 background-color: white;
-                cursor: pointer;
-                transition: box-shadow 1s;
-
-                &:hover {
-                    background-color: whitesmoke;
-                    box-shadow: 0px 0px 45px -5px black;
-                }
-            }
-        }
-
-        &_greating {
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-            justify-content: center;
-
-            &__circle {
-                border: 10px solid white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 100vmin;
-                overflow: hidden;
-                width: 50vmin;
-                height: 50vmin;
-                font-size:  50px;
-                text-align: center;
-                text-overflow: ellipsis;
             }
         }
     } 
-}
-
-.ppi-basket {
-    position: absolute;
-    width: 10vmin;
-    bottom: 5vmin;
-    left: calc(50% - 5vmin);
-    opacity: 0.4;
-    transition: opacity 1s;
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.8;
-    }
-}
-
-.ppi-greating {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
-
-    &__circle {
-        border: 10px solid white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 100vmin;
-        overflow: hidden;
-        width: 50vmin;
-        height: 50vmin;
-        font-size:  50px;
-        text-align: center;
-        text-overflow: ellipsis;
-    }
-}
-
-.ppi-dnd-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100vmin;
-    overflow: hidden;
-    width: 25vmin;
-    height: 25vmin;
-    background-color: white;
-    cursor: pointer;
-    transition: box-shadow 1s;
-    font-size: 30px;
-    text-align: center;
-    text-overflow: ellipsis;
-    color: gray;
-
-    &:hover {
-        background-color: whitesmoke;
-        box-shadow: inset 0px 0px 45px -5px black;
-    }
 }

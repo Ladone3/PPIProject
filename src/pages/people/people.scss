@@ -7,18 +7,21 @@ page-people {
         overflow: hidden;
         align-items: center;
 
-        &_activities, &_people {
+        &_people, &_activities {
+            z-index: 10;
             width: 40vmin;
             height: 100%;
             flex-grow: 1;
-        }
-
-        &_people {
-            z-index: 10;
-            flex-grow: 1;
-            align-items: center;
-            justify-content: center;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
     } 
+
+    .ppi-circle {
+        border: 3px solid rgb(68, 139, 68);
+        background: 3px solid rgb(68, 139, 68);
+        opacity: 0.8;
+    }
 }

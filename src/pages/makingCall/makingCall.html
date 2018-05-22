@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Making call
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-making-call-screen">
+      <div class="ppi-making-call-screen_people">
+        <div
+          *ngIf="person"
+          class="ppi-circular-button ppi-circular-image"
+          (click)="changePerson()">
+          <img [src]="person.image"/>
+        </div>
+      </div>
+
+      <div class="ppi-greating">
+          <div class="ppi-greating__circle">
+              How do you want to connect?
+          </div>
+      </div>
+
+      <div class="ppi-making-call-screen_activities">
+        <div
+          *ngIf="activity"
+          class="ppi-circular-button ppi-circular-icon"
+          (click)="changeActivity()">
+          <img [src]="activity.image"/>
+        </div>
+      </div>
+
+      <div class="ppi-making-call-screen_options">
+          <div
+            *ngIf="place"
+            class="ppi-making-call-screen_options__place"
+            (click)="changePlace()">
+            <img [src]="place.image"/>
+          </div>
+          <div class="ppi-making-call-screen_options__option"
+            (click)="makeSimpleCall()">
+            <img src="assets/imgs/call-answer.png"/>
+          </div>
+          <div class="ppi-making-call-screen_options__option"
+            (click)="makeVideoCall()">
+            <img src="assets/imgs/video-camera.png"/>
+          </div>
+          <div class="ppi-making-call-screen_options__option"
+            (click)="sendTextMessage()">
+            <img src="assets/imgs/close-envelope.png"/>
+          </div>
+          <div class="ppi-making-call-screen_options__basket">
+            <img src="assets/imgs/business.png"/>
+          </div>
+      </div>
+    <!-- <div class="ppi-making-call-screen__bottom-row"></div> -->
+  </div>
+</ion-content>

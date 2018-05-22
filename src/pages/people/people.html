@@ -9,22 +9,14 @@
 <ion-content padding>
   <div class="ppi-people-screen">
 
-    <!-- <div #activitiesZone class="ppi-people-screen__activities">
-      <div
-        *ngFor="let activity of activities"
-        [style.left.px]="positions[activity.id].x"
-        [style.top.px]="positions[activity.id].y"
-        class="ppi-circle">
-        <img [src]="activity.image"/>
-      </div>
-    </div> -->
     <div #activeZone class="ppi-people-screen_people">
       <div *ngIf="positions">
         <div
           *ngFor="let person of people"
           [style.left.px]="positions[person.id].x"
           [style.top.px]="positions[person.id].y"
-          class="ppi-circle">
+          class="ppi-circle"
+          (click)="onSelectPerson(person.ref)">
           <img [src]="person.image"/>
         </div>
       </div>
@@ -41,9 +33,12 @@
     </div>
 
     <div class="ppi-people-screen_activities">
-      <!-- <div class="ppi-people-screen_activities__button">
-        <img src="assets/imgs/activities/running.png"/>
-      </div> -->
+      <div
+        *ngIf="activity"
+        class="ppi-circular-button ppi-circular-icon"
+        (click)="changeActivity()">
+        <img [src]="activity.image"/>
+      </div>
     </div>
 
     <div class="ppi-basket">

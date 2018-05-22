@@ -20,36 +20,138 @@ ion-content {
     background-size: cover;
 }
 
-page-activities, page-people {
-    .ppi-circle {
-        position: absolute;
-        background-color: white;
-        width: 10vmin;
-        height: 10vmin;
-        margin-top: - 5vmin;
-        margin-left: - 5vmin;
-        border-radius: 100vmin;
-        top: 100px;
-        left: 100px;
-        transition: 0.5;
-        border: 3px solid rgb(68, 139, 68);
-        overflow: hidden;
-        cursor: pointer;
-        transition: width 2s,
-                    height 2s,
-                    margin-top 2s,
-                    margin-left 2s;
-        
+.ppi-basket {
+    position: absolute;
+    width: 10vmin;
+    bottom: 5vmin;
+    left: calc(50% - 5vmin);
+    opacity: 0.4;
+    transition: opacity 1s;
+    cursor: pointer;
 
-        img {
-            width: 100%;
-            height: 100%;
-        }
-        &:hover {
-            width: 15vmin;
-            height: 15vmin;
-            margin-top: - 7.5vmin;
-            margin-left: - 7.5vmin;
-        }
+    &:hover {
+        opacity: 0.8;
     }
+}
+
+.ppi-greating {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+
+    &__circle {
+        border: 10px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100vmin;
+        overflow: hidden;
+        width: 50vmin;
+        height: 50vmin;
+        font-size:  50px;
+        text-align: center;
+        text-overflow: ellipsis;
+    }
+}
+
+.ppi-dnd-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100vmin;
+    overflow: hidden;
+    width: 25vmin;
+    height: 25vmin;
+    background-color: white;
+    cursor: pointer;
+    transition: box-shadow 0.5s;
+    font-size: 30px;
+    text-align: center;
+    text-overflow: ellipsis;
+    color: gray;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    &:hover {
+        background-color: whitesmoke;
+        box-shadow: inset 0px 0px 45px -5px black;
+    }
+}
+
+.ppi-circle {
+    position: absolute;
+    width: 10vmin;
+    height: 10vmin;
+    background-color: white;
+    margin-top: - 5vmin;
+    margin-left: - 5vmin;
+    border-radius: 100vmin;
+    top: 100px;
+    left: 100px;
+    transition: 0.5;
+    overflow: hidden;
+    cursor: pointer;
+    transition: width 0.5s,
+                height 0.5s,
+                margin-top 0.5s,
+                margin-left 0.5s;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+    &:hover {
+        width: 15vmin;
+        height: 15vmin;
+        margin-top: - 7.5vmin;
+        margin-left: - 7.5vmin;
+    }
+}
+
+.ppi-circular-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100vmin;
+    overflow: hidden;
+    width: 25vmin;
+    height: 25vmin;
+    background-color: white;
+    cursor: pointer;
+    transition: box-shadow 0.5s;
+    font-size: 30px;
+    text-align: center;
+    text-overflow: ellipsis;
+    color: gray;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    &:hover {
+        background-color: whitesmoke;
+        box-shadow: 0px 0px 25px -5px black;
+    }
+}
+
+.ppi-circular-button.ppi-circular-icon {
+    border: 3px solid white;
+    background-color: white;
+    opacity: 0.8;
+
+    img {
+        width: 70%;
+        height: 70%;
+    }
+}
+
+.ppi-circular-button.ppi-circular-image {
+    border: 3px solid rgb(73, 141, 73);
+    background: 3px solid rgb(73, 141, 73);
+    opacity: 0.8;
 }

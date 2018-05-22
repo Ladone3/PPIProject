@@ -16,4 +16,8 @@ export interface Person {
     image: string;
   }
   
+export type Place = Person;
 export type Activity = Person;
+// export interface Activity extends Person {
+//     places: Place[];
+// }

@@ -6,12 +6,8 @@ import { MyApp } from './app.component';
 import { MainPage } from '../pages/main/main';
 import { ActivitiesPage } from '../pages/activities/activities';
 import { PeoplePage } from '../pages/people/people';
-
-import { AboutPage } from '../pages/about/about';
-import { CustomPage } from '../pages/customPage/customPage';
-import { ContactPage } from '../pages/contact/contact';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
+import { PlacesPage } from '../pages/places/places';
+import { MakingCallPage } from '../pages/makingCall/makingCall';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,13 +18,9 @@ import { AppDataService } from '../services/appDataService';
     MainPage,
     ActivitiesPage,
     PeoplePage,
-    
+    PlacesPage,
+    MakingCallPage,
     MyApp,
-    AboutPage,
-    ContactPage,
-    CustomPage,
-    HomePage,
-    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -39,13 +31,9 @@ import { AppDataService } from '../services/appDataService';
     MainPage,
     ActivitiesPage,
     PeoplePage,
-
+    PlacesPage,
+    MakingCallPage,
     MyApp,
-    AboutPage,
-    ContactPage,
-    CustomPage,
-    HomePage,
-    TabsPage
   ],
   providers: [
     StatusBar,

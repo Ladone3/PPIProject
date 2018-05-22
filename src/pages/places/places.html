@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Select place
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-places-screen">
+      <div class="ppi-places-screen_people">
+        <div
+          *ngIf="person"
+          class="ppi-circular-button ppi-circular-image"
+          (click)="changePerson()">
+          <img [src]="person.image"/>
+        </div>
+      </div>
+
+      <div class="ppi-greating">
+          <div class="ppi-greating__circle">
+              Where do you want to go?
+          </div>
+      </div>
+
+      <div class="ppi-places-screen_activities">
+        <div
+          *ngIf="activity"
+          class="ppi-circular-button ppi-circular-icon"
+          (click)="changeActivity()">
+          <img [src]="activity.image"/>
+        </div>
+      </div>
+
+      <div class="ppi-places-screen_places" *ngIf="places">
+          <div class="ppi-places-screen_places__dnd-place">
+            Drag option here
+          </div>
+          <div class="ppi-places-screen_places__list">
+            <div
+              *ngFor="let place of places"
+              class="ppi-place"
+              (click)="onSelectPlace(place)">
+              <img [src]="place.image"/>
+            </div>
+          </div>
+          <div class="ppi-places-screen_places__basket">
+            <img src="assets/imgs/business.png"/>
+          </div>
+      </div>
+    <!-- <div class="ppi-places-screen__bottom-row"></div> -->
+  </div>
+</ion-content>
