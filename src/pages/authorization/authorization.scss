@@ -1,0 +1,51 @@
+page-authorization {
+    .ppi-authorization-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+
+        &__center {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            box-sizing: content-box;
+            background-color: rgba(110, 113, 156, 0.12);
+            border-radius: 10px;
+            border: 1px solid rgba(110, 113, 156, 0.22);
+            box-shadow: 0px 0px 19px 2px rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+
+.ppi-authorization-input {
+    border: 2px solid #b9c7c1;
+    box-shadow: inset 0px 0px 13px -5px black;
+    font-size: 22px;
+    color: #949494;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    height: 40px;
+    padding: 5px;
+}
+
+.ppi-authorization-button {
+    border: 1px solid #a1ada8;
+    box-shadow: 0px 0px 12px -3px black;
+    margin-top: 20px;
+    font-size: 22px;
+    color: #949494;
+    border-radius: 5px;
+    height: 40px;
+    padding: 5px;
+    background-color: #c0d4d0;
+    color: #749082;
+    &:hover {
+        box-shadow: 0px 0px 10px -3px black;
+    }
+    &:active {
+        box-shadow: 0px 0px 10px -4px black;
+    }
+}

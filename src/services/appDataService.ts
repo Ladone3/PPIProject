@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Person, Activity, Place } from '../models/models';
+import { Person, Activity, Place, Authorization, Authorities } from '../models/models';
 import { PEOPLE, ACTIVITIES, PLACES, ACTIVITY_PLACE } from './mockData';
+
+export const AUTHORIZATION: Authorization = {
+    username: 'user',
+    token: '123456',
+};
+
+export const AUTHORITIES: Authorities = {
+    username: 'user',
+    password: 'user',
+};
 
 @Injectable()
 export class AppDataService {
@@ -8,8 +18,29 @@ export class AppDataService {
     private activities: Activity[] = ACTIVITIES
     private places: Place[] = PLACES;
     private activityPlace: { [activityId: string]: Place[] } = ACTIVITY_PLACE;
+    private authorization: Authorization;
 
     constructor() { }
+
+    public getAuthorization (): Promise<Authorization> {
+        if (this.authorization) {
+            return Promise.resolve(this.authorization);
+        } else {
+            return Promise.reject('User is not authorized!');
+        }
+    }
+
+    public authorize (authorities: Authorities): Promise<Authorization> {
+        if (
+            authorities.username === AUTHORITIES.username &&
+            authorities.password === AUTHORITIES.password
+        ) {
+            this.authorization = AUTHORIZATION
+            return Promise.resolve(this.authorization);
+        } else {
+            return Promise.reject(`User ${authorities.username} is not authorized!`);
+        }
+    }
 
     public getPlaceForActivityAndPerson (
         activityId: string, personId: string

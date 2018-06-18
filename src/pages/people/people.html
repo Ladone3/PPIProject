@@ -16,13 +16,16 @@
           [id]="person.id"
           [style.left.px]="positions[person.id].x"
           [style.top.px]="positions[person.id].y"
-          class="ppi-circle"
-          (click)="onSelectPerson(person.ref)">
+          [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged }"
+          (mousedown)="onCircleMouseDown($event, person)">
           <img [src]="person.image"/>
         </div>
       </div>
 
-      <div #obstacle class="ppi-dnd-button">
+      <div
+        #obstacle
+        [ngClass]="{ 'ppi-dnd-button': true, 'ppi-dnd-button-active': this.dragZoneIsActive }"
+        >
           Drag person here
       </div>
     </div>

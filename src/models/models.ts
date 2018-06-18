@@ -21,3 +21,14 @@ export type Activity = Person;
 // export interface Activity extends Person {
 //     places: Place[];
 // }
+
+export interface Authorities {
+    username: string;
+    password: string;
+};
+
+export interface Authorization {
+    username: string;
+    token: string;
+};
+  

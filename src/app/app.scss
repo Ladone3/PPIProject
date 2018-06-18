@@ -76,9 +76,20 @@ ion-content {
         height: 100%;
     }
 
-    &:hover {
+    &.ppi-dnd-button-active {
         background-color: whitesmoke;
         box-shadow: inset 0px 0px 45px -5px black;
+    }
+}
+
+.ppi-circle.ppi-dragging-circle {
+    box-shadow: 1px 1px 20px 0px black;
+    z-index: 200;
+    &:hover {
+        width: 15vmin;
+        height: 15vmin;
+        margin-top: - 7.5vmin;
+        margin-left: - 7.5vmin;
     }
 }
 
@@ -92,7 +103,6 @@ ion-content {
     border-radius: 100vmin;
     top: 100px;
     left: 100px;
-    transition: 0.5;
     overflow: hidden;
     cursor: pointer;
     transition: width 0.5s,
@@ -103,12 +113,14 @@ ion-content {
     img {
         width: 100%;
         height: 100%;
+        pointer-events: none;
     }
     &:hover {
-        width: 15vmin;
-        height: 15vmin;
-        margin-top: - 7.5vmin;
-        margin-left: - 7.5vmin;
+        opacity: 1;
+        // width: 15vmin;
+        // height: 15vmin;
+        // margin-top: - 7.5vmin;
+        // margin-left: - 7.5vmin;
     }
 }
 

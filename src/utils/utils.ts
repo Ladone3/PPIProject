@@ -5,11 +5,14 @@ let idCounter = 0;
 
 export const MAX_SPEED = 1;
 export const FRAME_RATE = 50;
+export const START_FROM_CYCLE = FRAME_RATE * 3;
+export const CIRCLE_MARGINE = 10;
 
 export type Positions = { [id: string]: Vector }; 
 
 export interface Circle<Type = any> {
   id: string;
+  isDragged?: boolean;
   title: string;
   image: string
   ref: Type;
@@ -37,6 +40,7 @@ export function moveCircles (parameters: Parameters) {
   for (let i = 0; i < circles.length; i++) {
     const circle = circles[i];
     const pos = oldPositions[circle.id];
+    if (circle.isDragged) continue;
     
     // Check the walls
     if (pos.x > maxPoint.x - circle.radius) circle.direction.x = -Math.abs(circle.direction.x);
@@ -47,7 +51,15 @@ export function moveCircles (parameters: Parameters) {
     // Hit test with other circles
     for (let j = i + 1; j < circles.length; j++) {
       const c = circles[j];
-      if (circle != c && hitTest(circle, c)) {
+      if (circle != c && (!circle.isDragged) && hitTest({
+        x: oldPositions[circle.id].x,
+        y: oldPositions[circle.id].y,
+        radius: circle.radius,
+      },{
+        x: oldPositions[c.id].x,
+        y: oldPositions[c.id].y,
+        radius: c.radius,
+      })) {
         circle.direction = calcReflectionAngle(circle, c);
         c.direction = calcReflectionAngle(c, circle);
       }
@@ -58,39 +70,33 @@ export function moveCircles (parameters: Parameters) {
 
   // move circles
   circles.forEach(circle => {
-    const oldPos = oldPositions[circle.id];
+    if (!circle.isDragged) {
+      const oldPos = oldPositions[circle.id];
 
-    const newPos = {
-      x: oldPos.x + circle.direction.x,
-      y: oldPos.y + circle.direction.y,
-    };
+      const newPos = {
+        x: oldPos.x + circle.direction.x,
+        y: oldPos.y + circle.direction.y,
+      };
 
-    // newPos.x = Math.min(
-    //   Math.max(newPos.x, minPoint.x + circle.radius),
-    //   maxPoint.x - circle.radius,
-    // );
-    // newPos.y = Math.min(
-    //   Math.max(newPos.y, minPoint.y + circle.radius),
-    //   maxPoint.y - circle.radius,
-    // );
+      // newPos.x = Math.min(
+      //   Math.max(newPos.x, minPoint.x + circle.radius),
+      //   maxPoint.x - circle.radius,
+      // );
+      // newPos.y = Math.min(
+      //   Math.max(newPos.y, minPoint.y + circle.radius),
+      //   maxPoint.y - circle.radius,
+      // );
 
-    newPositions[circle.id] = newPos;
+      newPositions[circle.id] = newPos;
+    } else {
+      newPositions[circle.id] = oldPositions[circle.id];
+    }
   });
 
   return newPositions;
 
   // =============================================================
   // =============================================================
-
-  function hitTest(circle1: Circle, circle2: Circle) {
-    const pos1 = oldPositions[circle1.id];
-    const pos2 = oldPositions[circle2.id];
-    const dist = Math.sqrt(
-      Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
-    );
-  
-    return dist < (circle1.radius +  circle2.radius);
-  }
 
   function calcReflectionAngle(circle1: Circle, circle2: Circle) {
     const pos1 = oldPositions[circle1.id];
@@ -199,4 +205,60 @@ function getRandomDirection(): Vector {
     x: MAX_SPEED - Math.random() * MAX_SPEED * 2,
     y: MAX_SPEED - Math.random() * MAX_SPEED * 2,
   }
+}
+
+export function onMousedown (
+  event: MouseEvent,
+  callback: (vector: Vector) => void,
+  endCallback?: () => void,
+) {
+  let startX = 0;
+  let startY = 0;
+
+  if (event.pageX) startX = event.pageX;
+  else if (event.clientX) startX = event.clientX;
+
+  if (event.pageY) startY = event.pageY;
+  else if (event.clientY) startY = event.clientY;
+
+  window.getSelection().removeAllRanges();
+
+  document.body.addEventListener('mousemove', _onchange);
+  document.body.addEventListener('mouseup', _onmouseup);
+
+  function _onchange (event) {
+      let endX = 0;
+      if (event.pageX) endX = event.pageX;
+      else if (event.clientX) endX = event.clientX;
+
+      const diffX = endX - startX;
+      startX = endX;
+
+      let endY = 0;
+      if (event.pageY) endY = event.pageY;
+      else if (event.clientY) endY = event.clientY;
+
+      const diffY = endY - startY;
+      startY = endY;
+
+      callback({ x: diffX, y: diffY, });
+  }
+
+  function _onmouseup (event) {
+      document.body.onmousemove = document.body.onmouseup = null;
+      document.body.removeEventListener('mousemove', _onchange);
+      document.body.removeEventListener('mouseup', _onmouseup);
+      endCallback();
+  }
+}
+
+export function hitTest(
+  circle1: { x: number, y: number, radius: number },
+  circle2: { x: number, y: number, radius: number },
+) {
+  const dist = Math.sqrt(
+    Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)
+  );
+
+  return dist < (circle1.radius +  circle2.radius);
 }
