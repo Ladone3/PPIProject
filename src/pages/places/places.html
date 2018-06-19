@@ -32,16 +32,20 @@
         </div>
       </div>
 
-      <div class="ppi-places-screen_places" *ngIf="places">
-          <div class="ppi-places-screen_places__dnd-place">
+      <div #placesList class="ppi-places-screen_places" *ngIf="places">
+          <div
+            #dropZone
+            [ngClass]="{ 'ppi-places-screen_places__dnd-place': true, 'ppi-dnd-place-active': this.dropZoneIsActive }">
             Drag option here
           </div>
           <div class="ppi-places-screen_places__list">
             <div
               *ngFor="let place of places"
-              class="ppi-place"
-              (click)="onSelectPlace(place)">
-              <img [src]="place.image"/>
+              [ngClass]="{ 'ppi-place': true, 'ppi-dragging-circle': place.isDragged }"
+              [style.left.px]="place.isDragged ? place.position.x : null"
+              (mousedown)="onPlaceMouseDown($event, place)"
+              (touchstart)="onPlaceMouseDown($event, place)">
+              <img [src]="place.ref.image"/>
             </div>
           </div>
           <div class="ppi-places-screen_places__basket">

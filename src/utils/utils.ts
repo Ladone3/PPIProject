@@ -1,5 +1,5 @@
 import { ElementRef } from '@angular/core';
-import { Person, Activity, Vector, Rect } from '../models/models';
+import { Person, Activity, Vector, Rect, Place } from '../models/models';
 
 let idCounter = 0;
 
@@ -18,17 +18,16 @@ export interface Circle<Type = any> {
   ref: Type;
   radius: number;
   direction: Vector;
+  position: Vector;
 }
 
 export interface Parameters {
-  curPositions: Positions;
   circles: Circle[];
   obstacleCircle: Circle<Rect>;
   animationBounds: Rect;
 }
 
 export function moveCircles (parameters: Parameters) {
-  const oldPositions = parameters.curPositions;
   const newPositions: Positions = {};
   const bounds = parameters.animationBounds;
   const circles = parameters.circles.concat(parameters.obstacleCircle);
@@ -39,7 +38,7 @@ export function moveCircles (parameters: Parameters) {
 
   for (let i = 0; i < circles.length; i++) {
     const circle = circles[i];
-    const pos = oldPositions[circle.id];
+    const pos = circle.position;
     if (circle.isDragged) continue;
     
     // Check the walls
@@ -51,15 +50,7 @@ export function moveCircles (parameters: Parameters) {
     // Hit test with other circles
     for (let j = i + 1; j < circles.length; j++) {
       const c = circles[j];
-      if (circle != c && (!circle.isDragged) && hitTest({
-        x: oldPositions[circle.id].x,
-        y: oldPositions[circle.id].y,
-        radius: circle.radius,
-      },{
-        x: oldPositions[c.id].x,
-        y: oldPositions[c.id].y,
-        radius: c.radius,
-      })) {
+      if (circle != c && (!circle.isDragged) && hitTest(circle, c)) {
         circle.direction = calcReflectionAngle(circle, c);
         c.direction = calcReflectionAngle(c, circle);
       }
@@ -71,25 +62,11 @@ export function moveCircles (parameters: Parameters) {
   // move circles
   circles.forEach(circle => {
     if (!circle.isDragged) {
-      const oldPos = oldPositions[circle.id];
-
       const newPos = {
-        x: oldPos.x + circle.direction.x,
-        y: oldPos.y + circle.direction.y,
+        x: circle.position.x + circle.direction.x,
+        y: circle.position.y + circle.direction.y,
       };
-
-      // newPos.x = Math.min(
-      //   Math.max(newPos.x, minPoint.x + circle.radius),
-      //   maxPoint.x - circle.radius,
-      // );
-      // newPos.y = Math.min(
-      //   Math.max(newPos.y, minPoint.y + circle.radius),
-      //   maxPoint.y - circle.radius,
-      // );
-
-      newPositions[circle.id] = newPos;
-    } else {
-      newPositions[circle.id] = oldPositions[circle.id];
+      circle.position = newPos;
     }
   });
 
@@ -99,8 +76,8 @@ export function moveCircles (parameters: Parameters) {
   // =============================================================
 
   function calcReflectionAngle(circle1: Circle, circle2: Circle) {
-    const pos1 = oldPositions[circle1.id];
-    const pos2 = oldPositions[circle2.id];
+    const pos1 = circle1.position;
+    const pos2 = circle2.position;
     const dx = pos1.x - pos2.x;
     const dy = pos1.y - pos2.y;
     const dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -162,7 +139,7 @@ export function getBoundingRectangle(element: ElementRef): Rect {
   }
 }
 
-export function getObstacleCircle(element: ElementRef): Circle<Rect> {
+export function getCircleFromRef(element: ElementRef): Circle<Rect> {
   const bounds = getBoundingRectangle(element);
   return {
     id: 'Obstacle',
@@ -171,6 +148,10 @@ export function getObstacleCircle(element: ElementRef): Circle<Rect> {
     direction: { x: 0, y: 0 },
     radius: bounds.width / 2,
     ref: bounds,
+    position: {
+      x: bounds.x,
+      y: bounds.y,
+    },
   };
 }
 
@@ -184,6 +165,7 @@ export function peopleToCircle(people: Person[]): Circle<Person>[] {
     direction: getRandomDirection(),
     radius: 50,
     ref: person,
+    position: { x: 0, y: 0 },
   }));
 }
 
@@ -197,6 +179,21 @@ export function activityToCircle(activities: Activity[]): Circle<Activity>[] {
     direction: getRandomDirection(),
     radius: 50,
     ref: activity,
+    position: { x: 0, y: 0 },
+  }));
+}
+
+export function placeToCircle(activities: Place[]): Circle<Place>[] {
+  // we don't know the size of active zone in that point of a time
+  // so we use document.body
+  return activities.map(activity => ({
+    id: 'Place-' + idCounter++,
+    title: activity.name,
+    image: activity.image,
+    direction: getRandomDirection(),
+    radius: 50,
+    ref: activity,
+    position: { x: 0, y: 0 },
   }));
 }
 
@@ -207,36 +204,42 @@ function getRandomDirection(): Vector {
   }
 }
 
-export function onMousedown (
-  event: MouseEvent,
+export function onDragStart (
+  event: (MouseEvent | TouchEvent),
   callback: (vector: Vector) => void,
   endCallback?: () => void,
 ) {
   let startX = 0;
   let startY = 0;
 
-  if (event.pageX) startX = event.pageX;
-  else if (event.clientX) startX = event.clientX;
+  const pointProvider = event instanceof MouseEvent ? event : event.touches[0];
 
-  if (event.pageY) startY = event.pageY;
-  else if (event.clientY) startY = event.clientY;
+  if (pointProvider.pageX) startX = pointProvider.pageX;
+  else if (pointProvider.clientX) startX = pointProvider.clientX;
+
+  if (pointProvider.pageY) startY = pointProvider.pageY;
+  else if (pointProvider.clientY) startY = pointProvider.clientY;
 
   window.getSelection().removeAllRanges();
 
   document.body.addEventListener('mousemove', _onchange);
-  document.body.addEventListener('mouseup', _onmouseup);
+  document.body.addEventListener('mouseup', _onend);
+  document.body.addEventListener('touchmove', _onchange);
+  document.body.addEventListener('touchend', _onend)
 
   function _onchange (event) {
+    const pointProvider = event instanceof MouseEvent ? event : event.touches[0];
+
       let endX = 0;
-      if (event.pageX) endX = event.pageX;
-      else if (event.clientX) endX = event.clientX;
+      if (pointProvider.pageX) endX = pointProvider.pageX;
+      else if (pointProvider.clientX) endX = pointProvider.clientX;
 
       const diffX = endX - startX;
       startX = endX;
 
       let endY = 0;
-      if (event.pageY) endY = event.pageY;
-      else if (event.clientY) endY = event.clientY;
+      if (pointProvider.pageY) endY = pointProvider.pageY;
+      else if (pointProvider.clientY) endY = pointProvider.clientY;
 
       const diffY = endY - startY;
       startY = endY;
@@ -244,20 +247,19 @@ export function onMousedown (
       callback({ x: diffX, y: diffY, });
   }
 
-  function _onmouseup (event) {
+  function _onend (event) {
       document.body.onmousemove = document.body.onmouseup = null;
       document.body.removeEventListener('mousemove', _onchange);
-      document.body.removeEventListener('mouseup', _onmouseup);
+      document.body.removeEventListener('mouseup', _onend);
+      document.body.removeEventListener('touchmove', _onchange);
+      document.body.removeEventListener('touchend', _onend)
       endCallback();
   }
 }
 
-export function hitTest(
-  circle1: { x: number, y: number, radius: number },
-  circle2: { x: number, y: number, radius: number },
-) {
+export function hitTest(circle1: Circle, circle2: Circle) {
   const dist = Math.sqrt(
-    Math.pow(circle1.x - circle2.x, 2) + Math.pow(circle1.y - circle2.y, 2)
+    Math.pow(circle1.position.x - circle2.position.x, 2) + Math.pow(circle1.position.y - circle2.position.y, 2)
   );
 
   return dist < (circle1.radius +  circle2.radius);

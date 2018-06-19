@@ -32,7 +32,8 @@
           [style.left.px]="positions[activity.id].x"
           [style.top.px]="positions[activity.id].y"
           [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': activity.isDragged }"
-          (mousedown)="onCircleMouseDown($event, activity)">
+          (mousedown)="onCircleMouseDown($event, activity)"
+          (touchstart)="onCircleMouseDown($event, activity)">
           <img [src]="activity.image"/>
         </div>
       </div>

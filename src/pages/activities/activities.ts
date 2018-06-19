@@ -10,13 +10,13 @@ import {
   Circle,
   moveCircles,
   getBoundingRectangle,
-  getObstacleCircle,
+  getCircleFromRef,
   activityToCircle,
   FRAME_RATE,
   START_FROM_CYCLE,
   CIRCLE_MARGINE,
   MAX_SPEED,
-  onMousedown,
+  onDragStart,
   hitTest,
 } from '../../utils/utils';
 
@@ -47,9 +47,10 @@ export class ActivitiesPage {
       this.getPerson(),
       this.appDataService.getActivities(),
     ]).then(([person, activities]) => {
-      this.activities = activityToCircle(activities);
+      const circles = activityToCircle(activities);
+      this.setInitialState(circles);
+      this.activities = circles;
       this.person = person;
-      this.setInititialState();
     }).catch(this.showError);
     this.startAnimation();
   }
@@ -91,40 +92,25 @@ export class ActivitiesPage {
   public onCircleMouseDown(event: MouseEvent, circle: Circle) {
     circle.isDragged = true;
 
-    const selectTest = () => {
-      const curCircle = {
-        x: this.positions[circle.id].x,
-        y: this.positions[circle.id].y,
-        radius: circle.radius,
-      };
-      const dragPlace = {
-        x: this.obstacleCircle.ref.x + this.obstacleCircle.ref.width / 2,
-        y: this.obstacleCircle.ref.y + this.obstacleCircle.ref.height / 2,
-        radius: this.obstacleCircle.radius,
-      }
-
-      return hitTest(curCircle, dragPlace);
-    }
-
-    onMousedown(event, (diff: Vector) => {
-      const newPos = {
+    onDragStart(event, (diff: Vector) => {
+      circle.position = {
         x: this.positions[circle.id].x + diff.x,
         y: this.positions[circle.id].y + diff.y,
       }
-      this.positions[circle.id] = newPos;
+      this.positions[circle.id] = circle.position;
       circle.direction = {
         x: Math.max(-MAX_SPEED, Math.min(MAX_SPEED, diff.x)),
         y: Math.max(-MAX_SPEED, Math.min(MAX_SPEED, diff.y)),
       };
 
-      if (selectTest()) {
+      if (hitTest(circle, this.obstacleCircle)) {
         this.dragZoneIsActive = true;
       } else {
         this.dragZoneIsActive = false;
       }
     }, () => {
       circle.isDragged = false;
-      if (selectTest()) {
+      if (hitTest(circle, this.obstacleCircle)) {
         this.onSelectActivity(circle.ref);
         this.dragZoneIsActive = false;
       }
@@ -152,29 +138,36 @@ export class ActivitiesPage {
         circle.radius = nativeCircle.clientWidth / 2 + CIRCLE_MARGINE;
       }
 
-      this.positions = moveCircles({
+      moveCircles({
         circles: this.activities,
         animationBounds: this.animationBounds,
-        curPositions: this.positions,
         obstacleCircle: this.obstacleCircle,
       });
+
+      const newPositions = {};
+      for (const circle of this.activities) {
+        newPositions[circle.id] = circle.position;
+      }
+      this.positions = newPositions;
     });
   }
 
-  private setInititialState() {
+  private setInitialState(circles: Circle[]) {
     const positions = {};
     const animationBounds = getBoundingRectangle(this.activeZone);
-    const obstacleCircle = getObstacleCircle(this.obstacle);
+    const obstacleCircle = getCircleFromRef(this.obstacle);
 
-    positions[obstacleCircle.id] = {
+    obstacleCircle.position = {
       x: obstacleCircle.ref.x + obstacleCircle.ref.width / 2,
       y: obstacleCircle.ref.y + obstacleCircle.ref.height / 2,
-    }
-    for (const circle of this.activities) {
-      positions[circle.id] = {
+    };
+    positions[obstacleCircle.id] = obstacleCircle.position;
+    for (const circle of circles) {
+      circle.position = {
         x: Math.random() * animationBounds.width,
         y: Math.random() * animationBounds.height,
-      }
+      };
+      positions[circle.id] = circle.position;
     }
 
     this.positions = positions;

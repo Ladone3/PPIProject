@@ -26,7 +26,8 @@ export class AppDataService {
         if (this.authorization) {
             return Promise.resolve(this.authorization);
         } else {
-            return Promise.reject('User is not authorized!');
+            return Promise.resolve(AUTHORIZATION);
+            // return Promise.reject('User is not authorized!');
         }
     }
 

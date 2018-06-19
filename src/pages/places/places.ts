@@ -1,17 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Person, Activity, Place } from '../../models/models';
+import { Person, Activity, Place, Vector, Rect } from '../../models/models';
 import { AppDataService } from '../../services/appDataService';
 import { MakingCallPage } from '../makingCall/makingCall';
 import { ActivitiesPage } from '../activities/activities';
 import { PeoplePage } from '../people/people';
+import { Circle, placeToCircle, onDragStart, getCircleFromRef, hitTest } from '../../utils/utils';
 
 @Component({
   selector: 'page-places',
   templateUrl: 'places.html'
 })
-export class PlacesPage { 
-  public places: Place[];
+export class PlacesPage {
+  @ViewChild('placesList') placesListHTML: ElementRef;
+  @ViewChild('dropZone') dropZoneHTML: ElementRef;
+
+  public dropZoneIsActive: boolean = false;
+
+  public places: Circle<Place>[];
   public activity: Activity;
   public person: Person;
 
@@ -29,7 +35,7 @@ export class PlacesPage {
     ]).then(([activity, person, places]) => {
       this.person = person;
       this.activity = activity;
-      this.places = places;
+      this.places = placeToCircle(places);
     }).catch(this.showError);
   }
 
@@ -68,6 +74,42 @@ export class PlacesPage {
       activityId: this.activity.id,
       personId: this.person.id,
       placeId: place.id,
+    });
+  }
+
+  public onPlaceMouseDown(event: (MouseEvent | TouchEvent), circle: Circle<Place>) {
+    const defaultOffset = this.placesListHTML.nativeElement.offsetLeft;
+    const dropZoneCircle = getCircleFromRef(this.dropZoneHTML);
+    const pointProvider = event instanceof MouseEvent ? event : event.touches[0];
+
+    let startX;
+    circle.radius = (event.target as HTMLElement).clientWidth / 2;
+    if (pointProvider.pageX) startX = pointProvider.pageX - defaultOffset - circle.radius;
+    else if (pointProvider.clientX) startX = pointProvider.clientX - defaultOffset - circle.radius;
+
+    circle.isDragged = true;
+    circle.position = {
+      x: startX,
+      y: 0,
+    }
+    
+
+    onDragStart(event, (diff: Vector) => {
+      circle.position = {
+        x: circle.position.x + diff.x,
+        y: 0,
+      }
+      if (hitTest(circle, dropZoneCircle)) {
+        this.dropZoneIsActive = true;
+      } else {
+        this.dropZoneIsActive = false;
+      }
+    }, () => {
+      circle.isDragged = false;
+      if (hitTest(circle, dropZoneCircle)) {
+        this.onSelectPlace(circle.ref);
+        this.dropZoneIsActive = false;
+      }
     });
   }
 

@@ -17,7 +17,8 @@
           [style.left.px]="positions[person.id].x"
           [style.top.px]="positions[person.id].y"
           [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged }"
-          (mousedown)="onCircleMouseDown($event, person)">
+          (mousedown)="onCircleMouseDown($event, person)"
+          (touchstart)="onCircleMouseDown($event, person)">
           <img [src]="person.image"/>
         </div>
       </div>
