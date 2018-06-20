@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Authorization, Authorities } from '../../models/models'
+import { Authorization /*, Authorities*/ } from '../../models/models'
 import { MainPage } from '../main/main';
 import { AppDataService } from '../../services/appDataService';
 

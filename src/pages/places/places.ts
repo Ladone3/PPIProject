@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Person, Activity, Place, Vector, Rect } from '../../models/models';
+import { Person, Activity, Place, Vector } from '../../models/models';
 import { AppDataService } from '../../services/appDataService';
 import { MakingCallPage } from '../makingCall/makingCall';
 import { ActivitiesPage } from '../activities/activities';
