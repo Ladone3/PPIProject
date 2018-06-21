@@ -20,6 +20,7 @@ export class PlacesPage {
   public places: Circle<Place>[];
   public activity: Activity;
   public person: Person;
+  public selectedPlace: Place;
 
   constructor(
     public navCtrl: NavController,
@@ -67,6 +68,11 @@ export class PlacesPage {
     
     return this.appDataService
       .getPlaceForActivityAndPerson(activityId, personId);
+  }
+
+  public onPlaceClick(event: (MouseEvent | TouchEvent), place: Place | undefined) {
+    this.selectedPlace = place;
+    event.stopPropagation();
   }
 
   public onSelectPlace(place: Place) {

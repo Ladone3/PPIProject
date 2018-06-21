@@ -31,6 +31,7 @@ export class PeoplePage {
   public positions: Positions;
   public people: Circle<Person>[];
   public activity: Activity;
+  public selectedPerson: Person;
 
   private obstacleCircle: Circle;
   private animationBounds: Rect;
@@ -66,6 +67,11 @@ export class PeoplePage {
 
   public changeActivity() {
     this.navCtrl.push(ActivitiesPage, {});
+  }
+
+  public onPersonClick(event: (MouseEvent | TouchEvent), person: Person | undefined) {
+    this.selectedPerson = person;
+    event.stopPropagation();
   }
 
   public onSelectPerson(person: Person) {

@@ -24,4 +24,11 @@ page-people {
         background: 3px solid rgb(68, 139, 68);
         opacity: 0.8;
     }
+
+    .ppi-greating__circle {
+        img {
+            width: 100%;
+            height: 100%; 
+        }
+    }
 }

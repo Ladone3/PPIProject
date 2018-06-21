@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Making call
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-chat-screen">
+      <div class="ppi-chat-screen_people">
+        <div
+          *ngIf="person"
+          class="ppi-circular-button ppi-circular-image">
+          <img [src]="person.image"/>
+        </div>
+      </div>
+
+      <div *ngIf="isVideoChat" class="ppi-video-chat-window">
+          <img
+            *ngIf="person"
+            class="ppi-video-chat-window__image"
+            [src]="person.image"
+          />
+          <div *ngIf="!person" class="ppi-video-chat-window__error">
+              No connection
+          </div>
+      </div>
+      
+      <div *ngIf="isAudioChat" class="ppi-greating">
+          <div class="ppi-greating__circle">
+              <img src="assets/imgs/call-answer.png"/>
+          </div>
+      </div>
+
+      <div *ngIf="isTextChat" class="ppi-greating">
+          <div class="ppi-greating__circle">
+              <img src="assets/imgs/close-envelope.png"/>
+          </div>
+      </div>
+
+      <div class="ppi-chat-screen_activities">
+        <div
+          *ngIf="activity"
+          class="ppi-circular-button ppi-circular-icon">
+          <img [src]="activity.image"/>
+        </div>
+      </div>
+
+      <div class="ppi-chat-screen_options">
+          <div
+            *ngIf="place"
+            class="ppi-chat-screen_options__place">
+            <img [src]="place.image"/>
+          </div>
+          <ul class="ppi-chat-screen_options__messages">
+            <li 
+              *ngFor="let message of messages"
+              class="ppi-chat-messages"
+            >
+              <label>{{message.senderName}}:</label>
+              <div>{{message.text}}</div>
+            </li>
+          </ul>
+          <div class="ppi-chat-screen_options__basket">
+            <img src="assets/imgs/business.png"/>
+          </div>
+      </div>
+  </div>
+</ion-content>

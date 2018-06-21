@@ -9,6 +9,7 @@ import { ActivitiesPage } from '../pages/activities/activities';
 import { PeoplePage } from '../pages/people/people';
 import { PlacesPage } from '../pages/places/places';
 import { MakingCallPage } from '../pages/makingCall/makingCall';
+import { ChatPage } from '../pages/audioVideoChat/audioVideoChat';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,6 +23,7 @@ import { AppDataService } from '../services/appDataService';
     PeoplePage,
     PlacesPage,
     MakingCallPage,
+    ChatPage,
     MyApp,
   ],
   imports: [
@@ -36,6 +38,7 @@ import { AppDataService } from '../services/appDataService';
     PeoplePage,
     PlacesPage,
     MakingCallPage,
+    ChatPage,
     MyApp,
   ],
   providers: [

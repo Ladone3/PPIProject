@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div class="ppi-people-screen">
+  <div class="ppi-people-screen" (click)="onPersonClick($event, undefined)">
 
     <div #activeZone class="ppi-people-screen_people">
       <div *ngIf="positions">
@@ -18,7 +18,9 @@
           [style.top.px]="positions[person.id].y"
           [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged }"
           (mousedown)="onCircleMouseDown($event, person)"
-          (touchstart)="onCircleMouseDown($event, person)">
+          (touchstart)="onCircleMouseDown($event, person)"
+          (click)="onPersonClick($event, person.ref)"
+          >
           <img [src]="person.image"/>
         </div>
       </div>
@@ -32,8 +34,11 @@
     </div>
 
     <div class="ppi-greating">
-        <div class="ppi-greating__circle">
+        <div *ngIf="!selectedPerson" class="ppi-greating__circle">
             Who you want to see today?
+        </div>
+        <div *ngIf="selectedPerson" class="ppi-greating__circle">
+            <img [src]="selectedPerson.image">
         </div>
     </div>
 

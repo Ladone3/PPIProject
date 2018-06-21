@@ -1,5 +1,34 @@
-page-places {
-    .ppi-places-screen {
+page-chat {
+    .ppi-video-chat-window {
+        overflow: hidden;
+        height: 50vmin;
+        width: 75vmin;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: black;
+        margin: -15vh -5vmin 0 -5vmin;
+
+        &__image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        &__error {
+            color: white;
+            font-size: 6vmin;
+        }
+    }
+
+    .ppi-greating__circle {
+        img {
+            opacity: 0.3;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    .ppi-chat-screen {
         width: 100%;
         height: 100%;
         display: flex;
@@ -18,7 +47,7 @@ page-places {
             position: relative;
         }
 
-        &_places {
+        &_options {
             z-index: 15;
             position: absolute;
             width: 80vmin;
@@ -32,24 +61,12 @@ page-places {
             box-sizing: border-box;
             padding: 1vmin;
             box-shadow: 0px 0px 17px -4px black;
+            justify-content: space-between;
 
-            &__dnd-place {
+            &__basket, &__place {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            &__list {
-                flex-grow: 1;
-                display: flex;
-                overflow-y: hidden;
-                overflow-x: auto;
-            }
-
-            .ppi-place, &__basket, &__dnd-place {
                 flex-grow: 0;
                 height: 10vmin;
                 width: 10vmin;
@@ -57,15 +74,26 @@ page-places {
                 min-width: 10vmin;
                 border-radius: 100vmin;
                 overflow: hidden;
-                margin-right: 2vmin;
+                margin-right: 1vmin;
                 border-color: white;
                 border: 2px solid white;
                 cursor: pointer;
 
                 img {
+                    width: 70%;
+                    height: 70%;
+                }
+
+                &:hover {
+                    border-color: whitesmoke;
+                    background-color: whitesmoke;
+                }
+            }
+
+            &__place {
+                img {
                     width: 100%;
                     height: 100%;
-                    pointer-events: none;
                 }
 
                 &:hover {
@@ -74,56 +102,33 @@ page-places {
                 }
             }
 
-            .ppi-place-shadow {
-                flex-grow: 0;
-                height: 10vmin;
-                width: 10vmin;
-                min-height: 10vmin;
-                min-width: 10vmin;
-                border-radius: 100vmin;
-                background-color: darkgray;
-                margin-right: 2vmin;
-            }
+            &__messages {
+                flex-grow: 1;
+                margin: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+                white-space: normal;
+                padding: 0;
 
-            &__dnd-place {
-                background-color: whitesmoke;
-                &.ppi-dnd-place-active {
-                    background-color: whitesmoke;
-                    border-color: whitesmoke;                    
-                    box-shadow: inset 0px 0px 15px -5px black;
+                .ppi-chat-messages {
+                    label {
+                        color: gray;
+                    }
+                    div {
+                        font-size: 20px;
+                        color: gray;
+                    }
+                    margin-top: 5px;
                 }
             }
 
             &__basket {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                img {
-                    width: 70%;
-                    height: 70%;
-                }
                 opacity: 0.6;
-                margin-right: 0;
 
                 &:hover {
                     opacity: 1;
-                    border-color: whitesmoke;
-                    background-color: whitesmoke;
                 }
             }
         }
-    }
-
-    .ppi-dragging-circle {
-        position: absolute;
-        cursor: pointer;
-    }
-
-    .ppi-greating__circle {
-        img {
-            width: 100%;
-            height: 100%; 
-        }
-    }
+    } 
 }

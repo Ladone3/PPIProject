@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Person, Activity, Place } from '../../models/models';
+import { Person, Activity, Place, CHAT_MODE } from '../../models/models';
 import { AppDataService } from '../../services/appDataService';
 import { PeoplePage } from '../people/people';
 import { ActivitiesPage } from '../activities/activities';
 import { PlacesPage } from '../places/places';
+import { ChatPage } from '../audioVideoChat/audioVideoChat';
 
 @Component({
   selector: 'page-making-call',
@@ -70,15 +71,30 @@ export class MakingCallPage {
   }
 
   public makeSimpleCall() {
-    alert('Phone call: function not implemented yet!');
+    this.navCtrl.push(ChatPage, {
+      activityId: this.activity.id,
+      personId: this.person.id,
+      placeId: this.place.id,
+      chatMode: CHAT_MODE.AUDIO,
+    });
   }
 
   public makeVideoCall() {
-    alert('Video call: function not implemented yet!');
+    this.navCtrl.push(ChatPage, {
+      activityId: this.activity.id,
+      personId: this.person.id,
+      placeId: this.place.id,
+      chatMode: CHAT_MODE.VIDEO,
+    });
   }
 
   public sendTextMessage() {
-    alert('Video call: function not implemented yet!');
+    this.navCtrl.push(ChatPage, {
+      activityId: this.activity.id,
+      personId: this.person.id,
+      placeId: this.place.id,
+      chatMode: CHAT_MODE.TEXT,
+    });
   }
 
   private showError(error) {
