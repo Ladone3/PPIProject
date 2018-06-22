@@ -13,6 +13,7 @@
     "windowsBuild": "npm run ebuild-full -w building for window ELECTRON_ENV=production",
     "linuxBuild": "npm run ebuild-full -l building for linux ELECTRON_ENV=production",
     "macBuild": "npm run ebuild-full -m building for mac ELECTRON_ENV=production",
+    "androidBuild": "ionic cordova build --release android",
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
