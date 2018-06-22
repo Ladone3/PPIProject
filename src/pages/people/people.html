@@ -16,7 +16,7 @@
           [id]="person.id"
           [style.left.px]="positions[person.id].x"
           [style.top.px]="positions[person.id].y"
-          [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged }"
+          [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged, 'ppi-selected-circle': (selectedPerson && person.ref.id === selectedPerson.id), 'ppi-blured-circle': selectedPerson && (person.ref.id !== selectedPerson.id) }"
           (mousedown)="onCircleMouseDown($event, person)"
           (touchstart)="onCircleMouseDown($event, person)"
           (click)="onPersonClick($event, person.ref)"
@@ -38,7 +38,10 @@
             Who you want to see today?
         </div>
         <div *ngIf="selectedPerson" class="ppi-greating__circle">
-            <img [src]="selectedPerson.image">
+            <div>That is <b>{{selectedPerson.fullName}}</b>.</div>
+            <div class="ppi-greating-description">
+              {{selectedPerson.description}}
+            </div>            
         </div>
     </div>
 

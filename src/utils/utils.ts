@@ -7,6 +7,7 @@ export const MAX_SPEED = 1;
 export const FRAME_RATE = 50;
 export const START_FROM_CYCLE = FRAME_RATE * 3;
 export const CIRCLE_MARGINE = 10;
+export const SLOW_MOVE_RATE = 10;
 
 export type Positions = { [id: string]: Vector }; 
 
@@ -25,6 +26,7 @@ export interface Parameters {
   circles: Circle[];
   obstacleCircle: Circle<Rect>;
   animationBounds: Rect;
+  slowMove?: boolean;
 }
 
 export function moveCircles (parameters: Parameters) {
@@ -63,8 +65,8 @@ export function moveCircles (parameters: Parameters) {
   circles.forEach(circle => {
     if (!circle.isDragged) {
       const newPos = {
-        x: circle.position.x + circle.direction.x,
-        y: circle.position.y + circle.direction.y,
+        x: circle.position.x + circle.direction.x / (parameters.slowMove ? SLOW_MOVE_RATE : 1),
+        y: circle.position.y + circle.direction.y / (parameters.slowMove ? SLOW_MOVE_RATE : 1),
       };
       circle.position = newPos;
     }

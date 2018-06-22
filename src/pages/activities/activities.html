@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div class="ppi-activities-screen">
+  <div class="ppi-activities-screen" (click)="onActivityClick($event, undefined)">
 
     <div class="ppi-activities-screen_people">
       <div 
@@ -19,8 +19,14 @@
     </div>
 
     <div class="ppi-greating">
-        <div class="ppi-greating__circle">
+        <div *ngIf="!selectedActivity" class="ppi-greating__circle">
             What do you want to do today?
+        </div>
+        <div *ngIf="selectedActivity" class="ppi-greating__circle">
+            <div>That is <b>{{selectedActivity.name}}</b>.</div>
+            <div class="ppi-greating-description">
+              {{selectedActivity.description}}
+            </div>            
         </div>
     </div>
 
@@ -31,9 +37,10 @@
           [id]="activity.id"
           [style.left.px]="positions[activity.id].x"
           [style.top.px]="positions[activity.id].y"
-          [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': activity.isDragged }"
+          [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': activity.isDragged, 'ppi-selected-circle': (selectedActivity && activity.ref.id === selectedActivity.id), 'ppi-blured-circle': selectedActivity && (activity.ref.id !== selectedActivity.id) }"
           (mousedown)="onCircleMouseDown($event, activity)"
-          (touchstart)="onCircleMouseDown($event, activity)">
+          (touchstart)="onCircleMouseDown($event, activity)"
+          (click)="onActivityClick($event, activity.ref)">
           <img [src]="activity.image"/>
         </div>
       </div>

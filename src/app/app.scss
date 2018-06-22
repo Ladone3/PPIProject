@@ -43,6 +43,7 @@ ion-content {
     &__circle {
         border: 10px solid white;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         border-radius: 100vmin;
@@ -52,6 +53,10 @@ ion-content {
         font-size:  50px;
         text-align: center;
         text-overflow: ellipsis;
+
+        .ppi-greating-description {
+            font-size: 22px;
+        }
     }
 }
 
@@ -82,14 +87,28 @@ ion-content {
     }
 }
 
-.ppi-circle.ppi-dragging-circle {
+.ppi-circle.ppi-dragging-circle,
+.ppi-circle.ppi-selected-circle.ppi-dragging-circle {
     box-shadow: 1px 1px 20px 0px black;
     z-index: 200;
-    &:hover {
-        width: 15vmin;
-        height: 15vmin;
-        margin-top: - 7.5vmin;
-        margin-left: - 7.5vmin;
+    width: 15vmin;
+    height: 15vmin;
+    margin-top: - 7.5vmin;
+    margin-left: - 7.5vmin;
+}
+
+.ppi-circle.ppi-selected-circle {
+    z-index: 200;
+    width: 25vmin;
+    height: 25vmin;
+    margin-top: - 12.5vmin;
+    margin-left: - 12.5vmin;
+}
+
+.ppi-circle.ppi-blured-circle {
+    opacity: 0.4;
+    img {
+        filter: grayscale(100%);
     }
 }
 

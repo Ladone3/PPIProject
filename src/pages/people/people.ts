@@ -149,6 +149,7 @@ export class PeoplePage {
         circles: this.people,
         animationBounds: this.animationBounds,
         obstacleCircle: this.obstacleCircle,
+        slowMove: Boolean(this.selectedPerson),
       });
 
       const newPositions = {};

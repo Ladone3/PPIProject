@@ -94,36 +94,43 @@ export const ACTIVITIES: Activity[] = [
         id: 'activity-1',
         name: 'Cycling',
         image: 'assets/imgs/activities/cycling.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-2',
         name: 'Horse riding',
         image: 'assets/imgs/activities/horse_riding.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-3',
         name: 'Running',
         image: 'assets/imgs/activities/running.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-4',
         name: 'Surfing',
         image: 'assets/imgs/activities/surfing.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-5',
         name: 'Swimming',
         image: 'assets/imgs/activities/swimming.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-6',
         name: 'Walking dog',
         image: 'assets/imgs/activities/walking_dog.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
     {
         id: 'activity-7',
         name: 'Walking',
         image: 'assets/imgs/activities/walking.png',
+        description: 'Description Text Description Text Description Text Description Text'
     },
 ]
 
