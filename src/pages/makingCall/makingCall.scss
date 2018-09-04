@@ -1,4 +1,74 @@
 page-making-call {
+    .ppi-active {
+        background-color: green!important;
+        &:hover {
+            background-color: seagreen!important;
+        }
+    }
+      
+    .ppi-video-chat-window {
+        position: relative;
+        z-index: 100;
+        overflow: hidden;
+        height: 50vmin;
+        width: 75vmin;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        
+        margin: -15vh -5vmin 0 -5vmin;
+
+        &__image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        &__error {
+            color: white;
+            font-size: 6vmin;
+        }
+
+        &__incoming-video {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            // height: 100%;
+            > video {
+                background-color: black;
+                border: 1px solid black;
+                width: 100%;
+                // max-height: 100%;
+            }
+        }
+
+        &__outgoing-video {
+            position: absolute;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            bottom: 10px;
+            right: 10px;
+            width: 200px;
+            height: 120px;
+            > video {
+                border: 1px solid black;
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    }
+
+    .ppi-greating__circle {
+        img {
+            opacity: 0.3;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
     .ppi-making-call-screen {
         width: 100%;
         height: 100%;
@@ -16,6 +86,57 @@ page-making-call {
             justify-content: center;
             align-items: center;
             position: relative;
+        }
+
+        &_text-chat {
+            z-index: 100;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 80vmin;
+            height: 90%;
+            background-color: white;
+            overflow: hidden;
+            bottom: 5vmin;
+            left: calc(50% - 40vmin);
+            display: flex;
+            border-radius: 50px;
+            box-sizing: border-box;
+            padding: 25px 30px;
+            box-shadow: 0px 0px 17px -4px black;
+            justify-content: space-between;
+
+            &__messages {
+                position: relative;
+                flex-grow: 1;
+                margin: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+                white-space: normal;
+                padding: 0;
+                box-sizing: content-box;
+                flex-grow: 1;
+
+                .ppi-chat-messages {
+                    label {
+                        color: gray;
+                    }
+                    div {
+                        font-size: 20px;
+                        color: gray;
+                    }
+                    margin-top: 5px;
+                }
+            }
+
+            &__new-message {
+                margin-top: 10px;
+                height: 100px;
+                border-radius: 10px;
+                border: 1px solid gray;
+                flex-grow: 0;
+            }
         }
 
         &_options {

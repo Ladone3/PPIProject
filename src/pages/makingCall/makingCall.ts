@@ -1,20 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Person, Activity, Place, CHAT_MODE } from '../../models/models';
+import { Person, Activity, Place } from '../../models/models';
 import { AppDataService } from '../../services/appDataService';
-import { PeoplePage } from '../people/people';
+import SimpleWebRTC from 'simplewebrtc';
 import { ActivitiesPage } from '../activities/activities';
 import { PlacesPage } from '../places/places';
-import { ChatPage } from '../audioVideoChat/audioVideoChat';
+import { PeoplePage } from '../people/people';
 
 @Component({
   selector: 'page-making-call',
   templateUrl: 'makingCall.html'
 })
-export class MakingCallPage { 
+export class MakingCallPage {
+  @ViewChild('incomingVideo') incomingVideoEl: ElementRef;
+  @ViewChild('outgoingVideo') outgoingVideoEl: ElementRef;
+  
   public place: Place;
   public activity: Activity;
   public person: Person;
+  public textMessage: string = '';
+  private webrtc: SimpleWebRTC;
+
+  public isCallActive: boolean = false; 
+  public isVideo: boolean = true; 
 
   constructor(
     public navCtrl: NavController,
@@ -39,16 +47,45 @@ export class MakingCallPage {
     return this.appDataService.getPersonById(personId);
   }
 
-  public changePerson() {
-    this.navCtrl.push(PeoplePage, {
-      activityId: this.activity.id,
-      placeId: this.place.id,
-    });
-  }
-
   private getActivity(): Activity {
     const activityId = this.navParams.get('activityId');
     return this.appDataService.getActivityById(activityId);
+  }
+
+  private getPlace(): Place {
+    const placeId = this.navParams.get('placeId');
+    return this.appDataService.getPlaceById(placeId);
+  }
+
+  public ionViewDidEnter() {
+    requestAnimationFrame(() => {
+      this.webrtc = new SimpleWebRTC({
+        localVideoEl: this.outgoingVideoEl.nativeElement,
+        remoteVideosEl: this.incomingVideoEl.nativeElement,
+        autoRequestMedia: true
+      });
+    });
+  }
+
+  public joinCall() {
+    const roomId = getRoomId(this.person.id);
+
+    this.isCallActive = !this.isCallActive;
+    if (this.isCallActive) {
+      this.webrtc.joinRoom(roomId);
+    } else {
+      this.webrtc.leaveRoom();
+    }
+  }
+
+  public switchVideo() {
+    if (this.isVideo) {
+      this.isVideo = false;
+      this.webrtc.pauseVideo();
+    } else {
+      this.isVideo = true;
+      this.webrtc.resumeVideo()
+    }
   }
 
   public changeActivity() {
@@ -58,11 +95,6 @@ export class MakingCallPage {
     });
   }
 
-  private getPlace(): Place {
-    const placeId = this.navParams.get('placeId');
-    return this.appDataService.getPlaceById(placeId);
-  }
-
   public changePlace() {
     this.navCtrl.push(PlacesPage, {
       personId: this.person.id,
@@ -70,34 +102,18 @@ export class MakingCallPage {
     });
   }
 
-  public makeSimpleCall() {
-    this.navCtrl.push(ChatPage, {
+  public changePerson() {
+    this.navCtrl.push(PeoplePage, {
       activityId: this.activity.id,
-      personId: this.person.id,
       placeId: this.place.id,
-      chatMode: CHAT_MODE.AUDIO,
-    });
-  }
-
-  public makeVideoCall() {
-    this.navCtrl.push(ChatPage, {
-      activityId: this.activity.id,
-      personId: this.person.id,
-      placeId: this.place.id,
-      chatMode: CHAT_MODE.VIDEO,
-    });
-  }
-
-  public sendTextMessage() {
-    this.navCtrl.push(ChatPage, {
-      activityId: this.activity.id,
-      personId: this.person.id,
-      placeId: this.place.id,
-      chatMode: CHAT_MODE.TEXT,
     });
   }
 
   private showError(error) {
     console.log(error)
   }
+}
+
+export function getRoomId(userId: string): string {
+  return `${userId}~#~roomId`;
 }

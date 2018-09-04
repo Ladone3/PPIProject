@@ -7,6 +7,10 @@
  * https://webpack.js.org/configuration/
  */
 
+// ======================================================
+// difine DATA_SERVER_URL to set the server adress
+// ======================================================
+
 var path = require('path');
 var webpack = require('webpack');
 var ionicWebpackFactory = require(process.env.IONIC_WEBPACK_FACTORY);
@@ -100,6 +104,16 @@ var devConfig = {
         loader: process.env.IONIC_WEBPACK_LOADER
       }
     ]
+  },
+  devServer: {
+    proxy: {
+        '/data-server**': {
+            target: process.env.DATA_SERVER_URL || 'http://localhost:8080',
+            pathRewrite: {'/data-server' : ''},
+            changeOrigin: true,
+            secure: false,
+        },
+    },
   },
 
   externals: externals,

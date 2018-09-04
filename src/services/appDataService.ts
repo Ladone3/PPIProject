@@ -31,13 +31,19 @@ export class AppDataService {
         }
     }
 
-    public authorize (authorities: Authorities): Promise<Authorization> {
-        if (
+    public async authorize (authorities: Authorities): Promise<Authorization> {
+        if (authorities.social) {
+            // not implemented
+        } else if (
             authorities.username === AUTHORITIES.username &&
             authorities.password === AUTHORITIES.password
         ) {
             this.authorization = AUTHORIZATION
             return Promise.resolve(this.authorization);
+            // const authorization: any = await executePOST({
+            //     url: 'auth/login/',
+            //     body: authorities,
+            // });
         } else {
             return Promise.reject(`User ${authorities.username} is not authorized!`);
         }
@@ -90,4 +96,23 @@ export class AppDataService {
     }
 }
 
-
+export async function executePOST<Type>(params: {
+    url: string;
+    body: any;
+}): Promise<Type> {
+    const response = await fetch(`/data-server/${params.url}`, {
+        method: 'POST',
+        body: params.body,
+        credentials: 'same-origin',
+        mode: 'cors',
+        cache: 'default',
+        // headers: params.headers,
+    });
+    if (response.ok) {
+        return response.json();
+    } else {
+        const error = new Error(response.statusText);
+        (error as any).response = response;
+        throw error;
+    }
+} 

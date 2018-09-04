@@ -35,14 +35,11 @@ export interface Activity {
 export interface Authorities {
     username: string;
     password: string;
+    social?: 'google' | 'facebook';
 };
 
 export interface Authorization {
     username: string;
     token: string;
-};
-
-export enum CHAT_MODE {
-    VIDEO, AUDIO, TEXT,
 };
   
