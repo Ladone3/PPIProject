@@ -1,11 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Place, Vector } from '../../models/models';
-import { AppDataService } from '../../services/appDataService';
+import { AppDataService, EMPTY_ACTIVITY, EMPTY_PLACE } from '../../services/appDataService';
 import { MakingCallPage } from '../makingCall/makingCall';
 import { ActivitiesPage } from '../activities/activities';
 import { PeoplePage } from '../people/people';
 import { Circle, placeToCircle, onDragStart, getCircleFromRef, hitTest } from '../../utils/utils';
+import { AuthorizationPage } from '../authorization/authorization';
 
 @Component({
   selector: 'page-places',
@@ -29,6 +30,12 @@ export class PlacesPage {
   ) { }
 
   public ionViewWillEnter() {
+    const authorization = this.appDataService.getAuthorization().then(authorization => {
+      if (!authorization) {
+        this.navCtrl.push(AuthorizationPage);
+      }
+    });
+    
     Promise.all([
       this.getActivity(),
       this.getPerson(),
@@ -40,7 +47,7 @@ export class PlacesPage {
     }).catch(this.showError);
   }
 
-  private getPerson(): Person {
+  private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
     return this.appDataService.getPersonById(personId);
   }
@@ -51,8 +58,11 @@ export class PlacesPage {
     });
   }
 
-  private getActivity(): Activity {
+  private async getActivity(): Promise<Activity> {
     const activityId = this.navParams.get('activityId');
+    if (activityId === EMPTY_ACTIVITY.id) {
+      return EMPTY_ACTIVITY;
+    }
     return this.appDataService.getActivityById(activityId);
   }
 
@@ -62,7 +72,7 @@ export class PlacesPage {
     });
   }
 
-  private getPlaces(): Place[] {
+  private getPlaces(): Promise<Place[]> {
     const personId = this.navParams.get('personId');
     const activityId = this.navParams.get('activityId');
     

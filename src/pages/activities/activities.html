@@ -4,6 +4,7 @@
       Select activity
     </ion-title>
   </ion-navbar>
+  <user-info></user-info>
 </ion-header>
 
 <ion-content padding>
@@ -48,6 +49,11 @@
         #obstacle
         [ngClass]="{ 'ppi-dnd-button': true, 'ppi-dnd-button-active': this.dragZoneIsActive }">
         Drag activity here
+        <button
+          class="ppi-skip-button"
+          (click)="onSkip()">
+          Skip
+        </button>
       </div>
     </div>
 

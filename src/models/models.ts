@@ -15,8 +15,14 @@ export interface Person {
     name: string;
     fullName: string;
     description: string;
-    image: string;
+    foreignId: string;
+    email: string;
+    surname: string;
+    image: any;
+    preferredActivities: Activity[];
 }
+
+export type Authorization = Person;
 
 export interface Place {
     id: string;
@@ -30,6 +36,7 @@ export interface Activity {
     name: string;
     image: string;
     description: string;
+    preferredPlaces: Place[];
 }
 
 export interface Authorities {
@@ -38,8 +45,4 @@ export interface Authorities {
     social?: 'google' | 'facebook';
 };
 
-export interface Authorization {
-    username: string;
-    token: string;
-};
   

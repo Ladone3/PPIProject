@@ -105,16 +105,16 @@ var devConfig = {
       }
     ]
   },
-  devServer: {
-    proxy: {
-        '/data-server**': {
-            target: process.env.DATA_SERVER_URL || 'http://localhost:8080',
-            pathRewrite: {'/data-server' : ''},
-            changeOrigin: true,
-            secure: false,
-        },
-    },
-  },
+  // devServer: {
+  //   proxy: {
+  //       '/data-server/**': {
+  //           target: process.env.DATA_SERVER_URL || 'http://localhost:8080',
+  //           pathRewrite: {'/data-server' : ''},
+  //           changeOrigin: true,
+  //           secure: false,
+  //       },
+  //   },
+  // },
 
   externals: externals,
 

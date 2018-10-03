@@ -164,6 +164,7 @@ export function peopleToCircle(people: Person[]): Circle<Person>[] {
     id: 'Person-' + idCounter++,
     title: person.name,
     image: person.image,
+    // image: undefined,
     direction: getRandomDirection(),
     radius: 50,
     ref: person,

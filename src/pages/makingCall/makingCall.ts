@@ -1,11 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Place } from '../../models/models';
-import { AppDataService } from '../../services/appDataService';
+import { AppDataService, EMPTY_ACTIVITY, EMPTY_PLACE } from '../../services/appDataService';
 import SimpleWebRTC from 'simplewebrtc';
 import { ActivitiesPage } from '../activities/activities';
 import { PlacesPage } from '../places/places';
 import { PeoplePage } from '../people/people';
+import { AuthorizationPage } from '../authorization/authorization';
 
 @Component({
   selector: 'page-making-call',
@@ -31,6 +32,11 @@ export class MakingCallPage {
   ) { }
 
   public ionViewWillEnter() {
+    const authorization = this.appDataService.getAuthorization().then(authorization => {
+      if (!authorization) {
+        this.navCtrl.push(AuthorizationPage);
+      }
+    });
     Promise.all([
       this.getActivity(),
       this.getPerson(),
@@ -42,18 +48,24 @@ export class MakingCallPage {
     }).catch(this.showError);
   }
 
-  private getPerson(): Person {
+  private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
     return this.appDataService.getPersonById(personId);
   }
 
-  private getActivity(): Activity {
+  private async getActivity(): Promise<Activity> {
     const activityId = this.navParams.get('activityId');
+    if (activityId === EMPTY_ACTIVITY.id) {
+      return EMPTY_ACTIVITY;
+    }
     return this.appDataService.getActivityById(activityId);
   }
 
-  private getPlace(): Place {
+  private async getPlace(): Promise<Place> {
     const placeId = this.navParams.get('placeId');
+    if (!placeId) {
+      return EMPTY_PLACE;
+    }
     return this.appDataService.getPlaceById(placeId);
   }
 

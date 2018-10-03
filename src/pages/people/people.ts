@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Rect, Vector } from '../../models/models';
-import { AppDataService } from '../../services/appDataService';
+import { AppDataService, EMPTY_ACTIVITY } from '../../services/appDataService';
 import { ActivitiesPage } from '../activities/activities';
 import { PlacesPage } from '../places/places';
 import { MakingCallPage } from '../makingCall/makingCall';
@@ -19,6 +19,7 @@ import {
   onDragStart,
   hitTest,
 } from '../../utils/utils';
+import { AuthorizationPage } from '../authorization/authorization';
 
 @Component({
   selector: 'page-people',
@@ -44,6 +45,11 @@ export class PeoplePage {
   ) { }
 
   public ionViewDidEnter() {
+    const authorization = this.appDataService.getAuthorization().then(authorization => {
+      if (!authorization) {
+        this.navCtrl.push(AuthorizationPage);
+      }
+    });
     Promise.all([
       this.getActivity(),
       this.appDataService.getPeople(),
@@ -52,17 +58,24 @@ export class PeoplePage {
       this.setInitialState(circles);
       this.people = circles;
       this.activity = activity;
+      this.startAnimation();
     }).catch(this.showError);
-    this.startAnimation();
   }
 
   public ionViewWillLeave() {
     this.stopAnimation();
   }
 
-  private getActivity(): Activity {
+  private async getActivity(): Promise<Activity> {
     const activityId = this.navParams.get('activityId');
-    return this.appDataService.getActivityById(activityId);
+    if (activityId === EMPTY_ACTIVITY.id) {
+      return EMPTY_ACTIVITY;
+    }
+    if (activityId) {
+      return this.appDataService.getActivityById(activityId);
+    } else {
+      return undefined;
+    }
   }
 
   public changeActivity() {
@@ -81,7 +94,7 @@ export class PeoplePage {
         personId: person.id,
         placeId: placeId,
       });
-    } else if (!placeId) {
+    } else if (!placeId && this.activity.id !== EMPTY_ACTIVITY.id) {
       this.navCtrl.push(PlacesPage, {
         personId: person.id,
         activityId: this.activity.id,

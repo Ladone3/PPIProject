@@ -13,10 +13,16 @@ import { MakingCallPage } from '../pages/makingCall/makingCall';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AppDataService } from '../services/appDataService';
+import { RegistrationPage } from '../pages/registration/registration';
+import { UserInfo } from '../widgets/userInfo/userInfo';
+import { EditDataPage } from '../pages/editData/editData';
 
 @NgModule({
   declarations: [
+    UserInfo,
+    EditDataPage,
     AuthorizationPage,
+    RegistrationPage,
     MainPage,
     ActivitiesPage,
     PeoplePage,
@@ -31,6 +37,8 @@ import { AppDataService } from '../services/appDataService';
   bootstrap: [IonicApp],
   entryComponents: [
     AuthorizationPage,
+    EditDataPage,
+    RegistrationPage,
     MainPage,
     ActivitiesPage,
     PeoplePage,

@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Registration
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="ppi-registration-page">
+    <div class="ppi-registration-page__center">
+      <label>Username</label>
+      <input [(ngModel)]="username" class="ppi-registration-input" type="text"/>
+      <label>Passowrd</label>
+      <input
+        [(ngModel)]="password"
+        type="password"
+        [ngClass]="{'ppi-registration-input': true, 'ppi-registration-not-equal': passwordsNotEqual() }"
+      />
+      <label>Approve passowrd</label>
+      <input
+        [(ngModel)]="approvePassword"
+        type="password"
+        class="ppi-registration-input"
+        [ngClass]="{'ppi-registration-input': true, 'ppi-registration-not-equal': passwordsNotEqual() }"
+      />
+      <button
+        [disabled]="passwordsNotEqual()"
+        (click)="onPressSignUp()"
+        class="ppi-registration-button">
+        SignUp
+      </button>
+    </div>
+  </div>
+</ion-content>

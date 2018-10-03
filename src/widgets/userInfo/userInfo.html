@@ -1,0 +1,7 @@
+<div class="ppi-user-info" *ngIf="authorization" (click)="editUserInfo($event)">
+  <div class="ppi-user-info__name">{{authorization.fullName}}</div>
+  <img class="ppi-user-info__image" [src]="authorization.image"/>
+  <div class="ppi-user-info__logout" (click)="onLogout($event)">
+    <img src="assets/imgs/logout.png"/>
+  </div>
+</div>

@@ -32,4 +32,20 @@ page-activities {
             height: 70%;
         }
     }
+
+    .ppi-skip-button {
+        width: 100%;
+        height: 100%;
+        float: right;
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        font-size: 35px;
+        color: white;
+        transition: opacity 1s;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
 }

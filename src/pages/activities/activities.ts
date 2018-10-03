@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Rect, Vector } from '../../models/models';
-import { AppDataService } from '../../services/appDataService';
+import { AppDataService, EMPTY_ACTIVITY } from '../../services/appDataService';
 import { PeoplePage } from '../people/people';
 import { PlacesPage } from '../places/places';
 import { MakingCallPage } from '../makingCall/makingCall';
@@ -19,6 +19,7 @@ import {
   onDragStart,
   hitTest,
 } from '../../utils/utils';
+import { AuthorizationPage } from '../authorization/authorization';
 
 @Component({
   selector: 'page-activities',
@@ -44,6 +45,11 @@ export class ActivitiesPage {
   ) { }
 
   public ionViewDidEnter() {
+    const authorization = this.appDataService.getAuthorization().then(authorization => {
+      if (!authorization) {
+        this.navCtrl.push(AuthorizationPage);
+      }
+    });
     Promise.all([
       this.getPerson(),
       this.appDataService.getActivities(),
@@ -52,17 +58,21 @@ export class ActivitiesPage {
       this.setInitialState(circles);
       this.activities = circles;
       this.person = person;
+      this.startAnimation();
     }).catch(this.showError);
-    this.startAnimation();
   }
 
   public ionViewWillLeave() {
     this.stopAnimation();
   }
 
-  private getPerson(): Person {
+  private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
-    return this.appDataService.getPersonById(personId);
+    if (personId) {
+      return this.appDataService.getPersonById(personId);
+    } else {
+      return undefined;
+    }
   }
 
   public changePerson() {
@@ -74,6 +84,10 @@ export class ActivitiesPage {
     event.stopPropagation();
   }
 
+  public onSkip() {
+    this.onSelectActivity(EMPTY_ACTIVITY);
+  }
+
   public onSelectActivity(activity: Activity) {
     const placeId = this.navParams.get('placeId');
     if (!this.person) {
@@ -81,7 +95,7 @@ export class ActivitiesPage {
         activityId: activity.id,
         placeId: placeId,
       });
-    } else if (!placeId) {
+    } else if (!placeId && activity.id !== EMPTY_ACTIVITY.id) {
       this.navCtrl.push(PlacesPage, {
         personId: this.person.id,
         activityId: activity.id,

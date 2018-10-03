@@ -12,8 +12,15 @@
       <label>Username</label>
       <input [(ngModel)]="username" class="ppi-authorization-input" type="text"/>
       <label>Passowrd</label>
-      <input [(ngModel)]="password" class="ppi-authorization-input" type="text"/>
-      <button (click)="onPressLogin()" class="ppi-authorization-button" type="text">Login</button>
+      <input [(ngModel)]="password" class="ppi-authorization-input" type="password"/>
+      <button (click)="onPressSignIn()" class="ppi-authorization-button">Sign in</button>
+      <button (click)="onPressSignUp()" class="ppi-registration-button">Sign up</button>
+      <img
+        (click)="onPressSignIn('facebook')"
+        title="Authorize via facebook"
+        class="ppi-facebook-button"
+        src="assets/imgs/facebook.png"
+      />
     </div>
   </div>
 </ion-content>

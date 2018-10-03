@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Authorization /*, Authorities*/ } from '../../models/models'
+import { Authorities } from '../../models/models'
 import { MainPage } from '../main/main';
 import { AppDataService } from '../../services/appDataService';
+import { RegistrationPage } from '../registration/registration';
 
 export enum AUTHORIZATION_STATUS {
   AUTHORIZED,
@@ -15,8 +16,8 @@ export enum AUTHORIZATION_STATUS {
   templateUrl: 'authorization.html'
 })
 export class AuthorizationPage {
-  public username: '';
-  public password: '';
+  public username: string = 'user1@mail.com'; // 'ladone3@gmail.com'
+  public password: string = 'q12345678';
   public status: AUTHORIZATION_STATUS = AUTHORIZATION_STATUS.NOT_AUTHORIZED; 
 
   constructor(
@@ -27,24 +28,42 @@ export class AuthorizationPage {
   }
 
   public ionViewDidEnter() {
-    this.appDataService.getAuthorization()
-      .then(this.onAuthorizationCompleted)
-      .catch(() => console.log(`No authorization!`));
+    this.appDataService.getAuthorization().then(authorization => {
+      if (authorization) {
+        this.onAuthorizationCompleted();
+      } else {
+        console.log(`No authorization!`);
+      }
+    });
   }
 
-  public onPressLogin () {
-    const authorities = {
+  public onPressSignIn (social?: 'google' | 'facebook') {
+    const authorities: Authorities = {
       username: this.username,
       password: this.password,
+      social,
     };
     this.appDataService.authorize(authorities)
       .then(this.onAuthorizationCompleted)
       .catch(this.onAuthorizationError);
   }
 
-  private onAuthorizationCompleted = (authorization: Authorization) => {
+  public onPressSignUp () {
+    const curInput = {
+      username: this.username,
+      password: this.password,
+    };
+    this.navCtrl.push(RegistrationPage, curInput);
+  }
+
+  private onAuthorizationCompleted = () => {
     this.status = AUTHORIZATION_STATUS.AUTHORIZED;
-    this.navCtrl.push(MainPage);
+    const previous = this.navCtrl.getPrevious();
+    if (previous) {
+      this.navCtrl.pop();
+    } else {
+      this.navCtrl.push(MainPage);
+    }
   };
 
   private onAuthorizationError = (error) => {

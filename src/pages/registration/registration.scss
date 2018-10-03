@@ -1,5 +1,5 @@
-page-authorization {
-    .ppi-authorization-page {
+page-registration {
+    .ppi-registration-page {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -20,7 +20,7 @@ page-authorization {
     }
 }
 
-.ppi-authorization-input {
+.ppi-registration-input {
     border: 2px solid #b9c7c1;
     box-shadow: inset 0px 0px 13px -5px black;
     font-size: 22px;
@@ -31,7 +31,7 @@ page-authorization {
     padding: 5px;
 }
 
-.ppi-authorization-button {
+.ppi-registration-button {
     border: 1px solid #a1ada8;
     box-shadow: 0px 0px 12px -3px black;
     margin-top: 20px;
@@ -42,8 +42,6 @@ page-authorization {
     padding: 5px;
     background-color: #c0d4d0;
     color: #749082;
-    cursor: pointer;
-
     &:hover {
         box-shadow: 0px 0px 10px -3px black;
     }
@@ -52,14 +50,21 @@ page-authorization {
     }
 }
 
+.ppi-registration-not-equal {
+    border: 1px solid red;
+}
 
-.ppi-facebook-button {
-    height: 50px;
-    width: 50px;
-    margin-top: 10px;
+.ppi-registration-button {
+    border: 1px solid #a1ada8;
     box-shadow: 0px 0px 12px -3px black;
-    cursor: pointer;
-    
+    margin-top: 20px;
+    font-size: 22px;
+    color: #949494;
+    border-radius: 5px;
+    height: 40px;
+    padding: 5px;
+    background-color: #9bc7bf;
+    color: #749082;
     &:hover {
         box-shadow: 0px 0px 10px -3px black;
     }

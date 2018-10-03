@@ -1,112 +1,196 @@
 import { Injectable } from '@angular/core';
 import { Person, Activity, Place, Authorization, Authorities } from '../models/models';
-import { PEOPLE, ACTIVITIES, PLACES, ACTIVITY_PLACE } from './mockData';
+import { compileActivity, compilePerson, compilePlace } from '../utils/dataUtils';
 
-export const AUTHORIZATION: Authorization = {
-    username: 'user',
-    token: '123456',
-};
+export const EMPTY_PLACE: Place = {
+    id: 'internet',
+    name: 'Internet',
+    image: 'assets/imgs/person.png',
+    description: 'Internet',
+}
 
-export const AUTHORITIES: Authorities = {
-    username: 'user',
-    password: 'user',
-};
+export const EMPTY_ACTIVITY: Activity = {
+    id: 'skipped',
+    name: 'Skipped',
+    image: 'assets/imgs/call-answer.png',
+    description: 'Simple call',
+    preferredPlaces: [EMPTY_PLACE],
+}
 
 @Injectable()
 export class AppDataService {
-    private people: Person[] = PEOPLE;
-    private activities: Activity[] = ACTIVITIES
-    private places: Place[] = PLACES;
-    private activityPlace: { [activityId: string]: Place[] } = ACTIVITY_PLACE;
-    private authorization: Authorization;
+    public authorization: Authorization;
 
     constructor() { }
 
-    public getAuthorization (): Promise<Authorization> {
+    // Authorization
+    // ==========================================================
+
+    public registerUser (authorities: Authorities): Promise<Authorization> {
+            return Promise.reject(`User ${authorities.username} is not authorized!`);
+    }
+
+    public logout (): Promise<void> {
+        if (!this.authorization) {
+            return;
+        }
+        this.authorization = undefined;
+        try {
+            return executeGet<void>({ url: 'auth/logout' });
+        } catch (error) {
+            console.warn(error);
+        }
+    }
+
+    public async getAuthorization (): Promise<Authorization> {
         if (this.authorization) {
-            return Promise.resolve(this.authorization);
-        } else {
-            return Promise.resolve(AUTHORIZATION);
-            // return Promise.reject('User is not authorized!');
+            return this.authorization;
+        }
+        try {
+            this.authorization = await executeGet<Authorization>({
+                url: 'user',
+            });
+            compilePerson(this.authorization);
+            return this.authorization;
+        } catch (error) {
+            console.warn(error);
+            return undefined;
         }
     }
 
     public async authorize (authorities: Authorities): Promise<Authorization> {
-        if (authorities.social) {
-            // not implemented
-        } else if (
-            authorities.username === AUTHORITIES.username &&
-            authorities.password === AUTHORITIES.password
-        ) {
-            this.authorization = AUTHORIZATION
-            return Promise.resolve(this.authorization);
-            // const authorization: any = await executePOST({
-            //     url: 'auth/login/',
-            //     body: authorities,
-            // });
-        } else {
+        try {
+            if (authorities.social) {
+                this.authorization = await executeGet<Authorization>({
+                    url: 'auth/login/facebook',
+                });
+            } else {
+                this.authorization = await executePost<Authorization>({
+                    url: 'auth/login/',
+                    body: JSON.stringify({
+                        email: authorities.username,
+                        password: authorities.password,
+                    }),
+                });
+            }
+            compilePerson(this.authorization);
+            return this.authorization;
+        } catch (error) {
+            console.warn(error);
             return Promise.reject(`User ${authorities.username} is not authorized!`);
         }
     }
 
-    public getPlaceForActivityAndPerson (
-        activityId: string, personId: string
-    ): Place[] {
-        const activityPlaces = this.activityPlace[activityId] || [];
-        return activityPlaces;
-    }
+    // Data
+    // ==========================================================
 
-    public getPersonById (id: string): Person | undefined {
-        for (const person of this.people) {
-            if (person.id === id) {
-                return person;
+    public async getPlaceForActivityAndPerson (
+        activityId: string, personId?: string
+    ): Promise<Place[]> {
+        try {
+            const activity = await executeGet<Activity>({
+                url: `activity/${activityId}`,
+            });
+            if (activity) {
+                compileActivity(activity);
+                return activity.preferredPlaces;
+            } else {
+                return [];
             }
+        } catch (error) {
+            console.warn(error);
+            return [];
         }
-        return undefined
     }
 
-    public getActivityById (id: string): Activity | undefined {
-        for (const activity of this.activities) {
-            if (activity.id === id) {
-                return activity;
+    public async getPersonById (id: string): Promise<Person> {
+        try {
+            const person = await executeGet<Person>({
+                url: `user/${id}`,
+            });
+            if (person) {
+                compilePerson(person);
             }
+            return person;
+        } catch (error) {
+            console.warn(error);
+            return undefined
         }
-        return undefined
     }
 
-    public getPlaceById (id: string): Place | undefined {
-        for (const place of this.places) {
-            if (place.id === id) {
-                return place;
+    public async getActivityById (id: string): Promise<Activity> {
+        try {
+            const activity = await executeGet<Activity>({
+                url: `activity/${id}`,
+            })
+
+            if (activity) {
+                compileActivity(activity);
             }
+            return activity;
+        } catch (error) {
+            console.warn(error);
+            return undefined
         }
-        return undefined
     }
 
-    public getPeople(): Promise<Person[]> {
-        return Promise.resolve(this.people);
+    public async getPlaceById (id: string): Promise<Place> {
+        try {
+            const place = await executeGet<Place>({
+                url: `place/${id}`,
+            });
+            if (place) {
+                compilePlace(place);
+            }
+            return place;
+        } catch (error) {
+            console.warn(error);
+            return undefined
+        }
     }
 
-    public getActivities(): Promise<Activity[]> {
-        return Promise.resolve(this.activities);
+    public async getPeople(): Promise<Person[]> {
+        try {
+            const people = await executeGet<Person[]>({
+                url: `user/friends`,
+            })
+            for (const person of people) {
+                compilePerson(person);
+            }
+            return people;
+        } catch (error) {
+            console.warn(error);
+            return undefined
+        }
     }
 
-    public getPlaces(): Promise<Place[]> {
-        return Promise.resolve(this.places);
+    public async getActivities(): Promise<Activity[]> {
+        try {
+            const activities = await executeGet<Activity[]>({
+                url: `user/activities`,
+            })
+            for (const activity of activities) {
+                compileActivity(activity);
+            }
+            return activities;
+
+        } catch (error) {
+            console.warn(error);
+            return undefined
+        }
     }
 }
 
-export async function executePOST<Type>(params: {
+export async function executePost<Type>(params: {
     url: string;
     body: any;
 }): Promise<Type> {
     const response = await fetch(`/data-server/${params.url}`, {
         method: 'POST',
         body: params.body,
-        credentials: 'same-origin',
-        mode: 'cors',
-        cache: 'default',
-        // headers: params.headers,
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
     if (response.ok) {
         return response.json();
@@ -114,5 +198,25 @@ export async function executePOST<Type>(params: {
         const error = new Error(response.statusText);
         (error as any).response = response;
         throw error;
+    }
+}
+
+export async function executeGet<Type>(params: {
+    url: string;
+}): Promise<Type> {
+    try {
+        const response = await fetch(`/data-server/${params.url}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+        });
+        if (response.ok) {
+            return response.json();
+        } else {
+            const error = new Error(response.statusText);
+            (error as any).response = response;
+            throw error;
+        }
+    } catch (error) {
+        console.error(error);
     }
 } 
