@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Place, Vector } from '../../models/models';
-import { AppDataService, EMPTY_ACTIVITY, EMPTY_PLACE } from '../../services/appDataService';
+import { AppDataService, EMPTY_ACTIVITY } from '../../services/appDataService';
 import { MakingCallPage } from '../makingCall/makingCall';
 import { ActivitiesPage } from '../activities/activities';
 import { PeoplePage } from '../people/people';
@@ -30,11 +30,9 @@ export class PlacesPage {
   ) { }
 
   public ionViewWillEnter() {
-    const authorization = this.appDataService.getAuthorization().then(authorization => {
-      if (!authorization) {
-        this.navCtrl.push(AuthorizationPage);
-      }
-    });
+    if (!this.appDataService.authorization) {
+      this.navCtrl.push(AuthorizationPage);
+    }
     
     Promise.all([
       this.getActivity(),

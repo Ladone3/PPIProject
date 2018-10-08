@@ -1,0 +1,14 @@
+<ion-content padding>
+ <ul class="fields-list" *ngIf="person">
+   <label>Name</label>
+   <input type="text" class="ppi-text-input" [(ngModel)]="person.name" (ngModelChange)="onChangeName()"/>
+   <label>Surname</label>
+   <input type="text" class="ppi-text-input" [(ngModel)]="person.surname" (ngModelChange)="onChangeName()"/>
+   <label>Full name</label>
+   <input type="text" class="ppi-text-input" [(ngModel)]="person.fullName" disabled/>
+   <label>Email</label>
+   <input type="text" class="ppi-text-input" [(ngModel)]="person.email"/>
+   <label>Image</label>
+   <input type="text" class="ppi-text-input" [(ngModel)]="person.image"/>
+ </ul>
+</ion-content>

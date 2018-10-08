@@ -14,7 +14,7 @@ export interface Person {
     id: string;
     name: string;
     fullName: string;
-    description: string;
+    description?: string;
     foreignId: string;
     email: string;
     surname: string;

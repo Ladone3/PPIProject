@@ -7,7 +7,8 @@
   "proxies": [
     {
       "path": "/data-server",
-      "proxyUrl": "http://localhost:8080"
+      "proxyUrl": "https://localhost:8080",
+      "rejectUnauthorized": false
     }
   ],
   "pro_id": "71ad824a"

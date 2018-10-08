@@ -32,11 +32,9 @@ export class MakingCallPage {
   ) { }
 
   public ionViewWillEnter() {
-    const authorization = this.appDataService.getAuthorization().then(authorization => {
-      if (!authorization) {
-        this.navCtrl.push(AuthorizationPage);
-      }
-    });
+    if (!this.appDataService.authorization) {
+      this.navCtrl.push(AuthorizationPage);
+    }
     Promise.all([
       this.getActivity(),
       this.getPerson(),

@@ -18,6 +18,8 @@ var ionicWebpackFactory = require(process.env.IONIC_WEBPACK_FACTORY);
 var ModuleConcatPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin');
 var PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 var externals = [
   (function () {
       var IGNORES = ["fs","child_process","electron","path","assert","cluster","crypto","dns","domain","events","http","https","net","os","process","punycode","querystring","readline","repl","stream","string_decoder","tls","tty","dgram","url","util","v8","vm","zlib"];

@@ -18,11 +18,9 @@ export class MainPage {
   ) { }
 
   public ionViewDidEnter() {
-    const authorization = this.appDataService.getAuthorization().then(authorization => {
-      if (!authorization) {
-        this.navCtrl.push(AuthorizationPage);
-      }
-    });
+    if (!this.appDataService.authorization) {
+      this.navCtrl.push(AuthorizationPage);
+    }
   }
 
   public moveToActivities () {

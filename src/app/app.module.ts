@@ -16,11 +16,13 @@ import { AppDataService } from '../services/appDataService';
 import { RegistrationPage } from '../pages/registration/registration';
 import { UserInfo } from '../widgets/userInfo/userInfo';
 import { EditDataPage } from '../pages/editData/editData';
+import { EditPersonPage } from '../pages/editData/editPerson/editPerson';
 
 @NgModule({
   declarations: [
     UserInfo,
     EditDataPage,
+    EditPersonPage,
     AuthorizationPage,
     RegistrationPage,
     MainPage,
@@ -37,6 +39,7 @@ import { EditDataPage } from '../pages/editData/editData';
   bootstrap: [IonicApp],
   entryComponents: [
     AuthorizationPage,
+    EditPersonPage,
     EditDataPage,
     RegistrationPage,
     MainPage,
