@@ -74,8 +74,7 @@ export class PlacesPage {
     const personId = this.navParams.get('personId');
     const activityId = this.navParams.get('activityId');
     
-    return this.appDataService
-      .getPlaceForActivityAndPerson(activityId, personId);
+    return this.appDataService.getPlaceForActivity(activityId);
   }
 
   public onPlaceClick(event: (MouseEvent | TouchEvent), place: Place | undefined) {

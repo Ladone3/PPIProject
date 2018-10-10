@@ -8,5 +8,11 @@
 </ion-header>
 
 <ion-content padding>
-  <page-edit-person *ngIf="user" [personId]="user.id"></page-edit-person>
+  <widget-edit-person
+    *ngIf="user"
+    [targetPerson]="user"
+    [onSubmit]="onSaveUserData">
+  </widget-edit-person>
+  <widget-edit-friends></widget-edit-friends>
+  <widget-edit-activities></widget-edit-activities>
 </ion-content>

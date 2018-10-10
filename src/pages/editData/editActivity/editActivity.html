@@ -1,0 +1,26 @@
+<div class="ppi-edit-panel" *ngIf="activity">
+  <h2>Activity</h2>
+  <div class="ppi-image">
+    <img [src]="activity.image" class="ppi-image__image"/>
+  </div>
+  <ul class="ppi-fields-list">
+    <label>Name</label>
+    <input type="text" class="ppi-text-input" [(ngModel)]="activity.name" [disabled]="!onSubmit"/>
+    <label>Image</label>
+    <input type="text" class="ppi-text-input" [(ngModel)]="activity.image" [disabled]="!onSubmit"/>
+    <widget-edit-places [places]="activity.preferredPlaces"></widget-edit-places>
+    <div *ngIf="onSubmit">
+      <div
+        class="ppi-submit-button ppi-pull-right"
+        (click)="onSubmit(activity)">
+        Save
+      </div>
+      <div
+        *ngIf="onRemove"
+        class="ppi-remove-button ppi-pull-right"
+        (click)="onRemove(targetActivity)">
+        Remove
+      </div>
+    </div>
+  </ul>
+</div>

@@ -11,11 +11,11 @@ export interface Rect {
 }
 
 export interface Person {
-    id: string;
+    id?: string;
     name: string;
     fullName: string;
     description?: string;
-    foreignId: string;
+    foreignId?: string;
     email: string;
     surname: string;
     image: any;
@@ -25,17 +25,17 @@ export interface Person {
 export type Authorization = Person;
 
 export interface Place {
-    id: string;
+    id?: string;
     name: string;
-    description: string;
+    description?: string;
     image: string;
 }
 
 export interface Activity {
-    id: string;
+    id?: string;
     name: string;
     image: string;
-    description: string;
+    description?: string;
     preferredPlaces: Place[];
 }
 

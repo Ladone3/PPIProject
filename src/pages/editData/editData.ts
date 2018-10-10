@@ -21,4 +21,8 @@ export class EditDataPage {
     }
     this.user = this.appDataService.authorization;
   }
+
+  public onSaveUserData(userData: Person) {
+    this.appDataService.updatePerson(userData);
+  }
 }

@@ -1,3 +1,105 @@
 page-edit-data {
    
 }
+
+.ppi-edit-panel {
+    background-color: rgba(150, 150, 150, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #bfbfbf;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+
+    &__header {
+        display: flex;
+        h1, h2, h3 {
+            flex-grow: 1;
+        }
+    }
+}
+
+.ppi-fields-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ppi-text-input {
+    border: 2px solid #b9c7c1;
+    box-shadow: inset 0px 0px 13px -5px black;
+    font-size: 22px;
+    color: #949494;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    height: 40px;
+    padding: 5px;
+}
+
+.ppi-submit-button, .ppi-remove-button {
+    border: 1px solid #a1ada8;
+    font-size: 22px;
+    color: #949494;
+    border-radius: 5px;
+    height: 40px;
+    padding: 5px;
+    background-color: #c0d4d0;
+    color: #749082;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #a8c0bb;
+    }
+    &:active {
+        background-color: #94a8a4;
+    }
+}
+
+.ppi-remove-button {
+    background-color: #d4c0c0;
+    color: #907474;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #c0a8a8;
+    }
+    &:active {
+        background-color: #a89494;
+    }
+}
+
+.ppi-pull-right {
+    float: right;
+}
+
+.ppi-image {
+    height: 70px;
+    width: 70px;
+    margin-right: 5px;
+    background-color: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__image {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+
+.ppi-entity-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.ppi-entity-list-collapsed {
+    * {
+        display: none!important;
+    }
+}
+
+.ppi-collapse-button {
+}

@@ -16,13 +16,23 @@ import { AppDataService } from '../services/appDataService';
 import { RegistrationPage } from '../pages/registration/registration';
 import { UserInfo } from '../widgets/userInfo/userInfo';
 import { EditDataPage } from '../pages/editData/editData';
-import { EditPersonPage } from '../pages/editData/editPerson/editPerson';
+import { EditPersonWidget } from '../pages/editData/editPerson/editPerson';
+import { EditFriends } from '../pages/editData/friends/friends';
+import { EditActivities } from '../pages/editData/activities/activities';
+import { EditActivityWidget } from '../pages/editData/editActivity/editActivity';
+import { EditPlaces } from '../pages/editData/places/places';
+import { EditPlaceWidget } from '../pages/editData/editPlace/editPlace';
 
 @NgModule({
   declarations: [
     UserInfo,
     EditDataPage,
-    EditPersonPage,
+    EditPersonWidget,
+    EditFriends,
+    EditActivities,
+    EditActivityWidget,
+    EditPlaces,
+    EditPlaceWidget,
     AuthorizationPage,
     RegistrationPage,
     MainPage,
@@ -39,8 +49,13 @@ import { EditPersonPage } from '../pages/editData/editPerson/editPerson';
   bootstrap: [IonicApp],
   entryComponents: [
     AuthorizationPage,
-    EditPersonPage,
+    EditPersonWidget,
     EditDataPage,
+    EditFriends,
+    EditActivities,
+    EditActivityWidget,
+    EditPlaces,
+    EditPlaceWidget,
     RegistrationPage,
     MainPage,
     ActivitiesPage,

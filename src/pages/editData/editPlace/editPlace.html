@@ -1,0 +1,25 @@
+<div class="ppi-edit-panel" *ngIf="place">
+  <h2>Place</h2>
+  <div class="ppi-image">
+    <img [src]="place.image" class="ppi-image__image"/>
+  </div>
+  <ul class="ppi-fields-list">
+    <label>Name</label>
+    <input type="text" class="ppi-text-input" [(ngModel)]="place.name" [disabled]="!onSubmit"/>
+    <label>Image</label>
+    <input type="text" class="ppi-text-input" [(ngModel)]="place.image" [disabled]="!onSubmit"/>
+    <div *ngIf="onSubmit">
+      <div
+        class="ppi-submit-button ppi-pull-right"
+        (click)="onSubmit(place)">
+        Save
+      </div>
+      <div
+        *ngIf="onRemove"
+        class="ppi-remove-button ppi-pull-right"
+        (click)="onRemove(targetPlace)">
+        Remove
+      </div>
+    </div>
+  </ul>
+</div>

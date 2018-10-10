@@ -84,9 +84,7 @@ export class AppDataService {
     // Data
     // ==========================================================
 
-    public async getPlaceForActivityAndPerson (
-        activityId: string, personId?: string
-    ): Promise<Place[]> {
+    public async getPlaceForActivity (activityId: string): Promise<Place[]> {
         try {
             const activity = await executeGet<Activity>({
                 url: `activity/${activityId}`,
@@ -116,6 +114,11 @@ export class AppDataService {
             console.warn(error);
             return undefined
         }
+    }
+
+    public async updatePerson (person: Person): Promise<Person> {
+        // ...
+        return Promise.resolve(person);
     }
 
     public async getActivityById (id: string): Promise<Activity> {

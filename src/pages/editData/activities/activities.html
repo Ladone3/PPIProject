@@ -1,0 +1,20 @@
+<div class="ppi-edit-panel" *ngIf="appDataService.authorization && activities">
+  <div class="ppi-edit-panel__header">
+    <h2>User activities ({{activities.length}})</h2>
+    <button class="ppi-collapse-button" (click)="collapsed=!collapsed">
+      {{collapsed ? '+' : '-'}}
+    </button>
+  </div>
+  <ul [ngClass]="{'ppi-entity-list': true, 'ppi-entity-list-collapsed': collapsed}">
+    <li *ngFor="let activity of activities">
+      <widget-edit-activity
+        [targetActivity]="activity"
+        [onSubmit]="onUpdateActivity"
+        [onRemove]="onRemoveActivity"
+      ></widget-edit-activity>
+    </li>
+    <button class="ppi-submit-button" (click)="onAddActivity()">
+      Add activity
+    </button>
+  </ul>
+</div>

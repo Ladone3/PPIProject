@@ -3,16 +3,15 @@ import { NavController } from 'ionic-angular';
 import { AppDataService } from '../../../services/appDataService';
 import { Person } from '../../../models/models';
 
-let idCounter = 0;
-
 @Component({
-  selector: 'page-edit-person',
+  selector: 'widget-edit-person',
   templateUrl: 'editPerson.html'
 })
-export class EditPersonPage {
-  @Input() personId: string;
-  @Input() newEntity?: boolean;
-  public person: Person;
+export class EditPersonWidget {
+  @Input() targetPerson?: Person;
+  @Input() onSubmit?: (person: Person) => void;
+  @Input() onRemove?: (person: Person) => void;
+  person: Person;
 
   constructor(
     public navCtrl: NavController,
@@ -20,21 +19,17 @@ export class EditPersonPage {
   ) { }
 
   public ngOnChanges() {
-    if (this.newEntity) {
+    if (!this.targetPerson) {
       this.person = {
-        id: 'TemporalId' + idCounter,
         name: '',
         fullName: '',
-        foreignId: 'TemporalForeignId' + (idCounter++),
         email: '',
         surname: '',
         image: '',
         preferredActivities: [],
       }
     } else {
-      this.appDataService.getPersonById(this.personId).then((person) => {
-        this.person = person;
-      });
+      this.person = {...this.targetPerson};
     }
   }
 
@@ -43,6 +38,7 @@ export class EditPersonPage {
   }
 
   public onSaveEntity() {
-    // ...
+    if (!this.onSubmit) { return }
+    this.onSubmit(this.person);
   }
 }

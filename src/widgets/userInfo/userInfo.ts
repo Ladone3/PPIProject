@@ -19,12 +19,6 @@ export class UserInfo {
     return this.appDataService.authorization;
   }
 
-  // public ngOnInit() {
-  //   this.appDataService.getAuthorization().then(authorization => {
-  //       this.authorization = authorization;
-  //   });
-  // }
-
   public onLogout(event: MouseEvent) {
     event.stopPropagation();
     this.appDataService.logout().then(() => {

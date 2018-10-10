@@ -150,24 +150,28 @@ export class PeoplePage {
 
   private animationStep() {
     requestAnimationFrame(() => {
-      // update circle sizes
-      for (const circle of this.people) {
-        const nativeCircle = this.activeZone.nativeElement.querySelector('#' + circle.id);
-        circle.radius = nativeCircle.clientWidth / 2 + CIRCLE_MARGINE;
-      }
+      try {
+        // update circle sizes
+        for (const circle of this.people) {
+          const nativeCircle = this.activeZone.nativeElement.querySelector('#' + circle.id);
+          circle.radius = nativeCircle.clientWidth / 2 + CIRCLE_MARGINE;
+        }
 
-      this.positions = moveCircles({
-        circles: this.people,
-        animationBounds: this.animationBounds,
-        obstacleCircle: this.obstacleCircle,
-        slowMove: Boolean(this.selectedPerson),
-      });
+        this.positions = moveCircles({
+          circles: this.people,
+          animationBounds: this.animationBounds,
+          obstacleCircle: this.obstacleCircle,
+          slowMove: Boolean(this.selectedPerson),
+        });
 
-      const newPositions = {};
-      for (const circle of this.people) {
-        newPositions[circle.id] = circle.position;
+        const newPositions = {};
+        for (const circle of this.people) {
+          newPositions[circle.id] = circle.position;
+        }
+        this.positions = newPositions;
+      } catch (error) {
+        this.stopAnimation();
       }
-      this.positions = newPositions;
     });
   }
 

@@ -1,0 +1,20 @@
+<div class="ppi-edit-panel" *ngIf="places">
+  <div class="ppi-edit-panel__header">
+    <h2>Places ({{places.length}})</h2>
+    <button class="ppi-collapse-button" (click)="collapsed=!collapsed">
+      {{collapsed ? '+' : '-'}}
+    </button>
+  </div>
+  <ul [ngClass]="{'ppi-entity-list': true, 'ppi-entity-list-collapsed': collapsed}">
+    <li *ngFor="let place of places">
+      <widget-edit-place
+        [targetPlace]="place"
+        [onSubmit]="onUpdatePlace"
+        [onRemove]="onRemovePlace"
+      ></widget-edit-place>
+    </li>
+    <button class="ppi-submit-button" (click)="onAddPlace()">
+      Add place
+    </button>
+  </ul>
+</div>

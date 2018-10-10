@@ -152,24 +152,28 @@ export class ActivitiesPage {
 
   private animationStep() {
     requestAnimationFrame(() => {
-      // update circle sizes
-      for (const circle of this.activities) {
-        const nativeCircle = this.activeZone.nativeElement.querySelector('#' + circle.id);
-        circle.radius = nativeCircle.clientWidth / 2 + CIRCLE_MARGINE;
-      }
+      try {
+        // update circle sizes
+        for (const circle of this.activities) {
+          const nativeCircle = this.activeZone.nativeElement.querySelector('#' + circle.id);
+          circle.radius = nativeCircle.clientWidth / 2 + CIRCLE_MARGINE;
+        }
 
-      moveCircles({
-        circles: this.activities,
-        animationBounds: this.animationBounds,
-        obstacleCircle: this.obstacleCircle,
-        slowMove: Boolean(this.selectedActivity),
-      });
+        moveCircles({
+          circles: this.activities,
+          animationBounds: this.animationBounds,
+          obstacleCircle: this.obstacleCircle,
+          slowMove: Boolean(this.selectedActivity),
+        });
 
-      const newPositions = {};
-      for (const circle of this.activities) {
-        newPositions[circle.id] = circle.position;
+        const newPositions = {};
+        for (const circle of this.activities) {
+          newPositions[circle.id] = circle.position;
+        }
+        this.positions = newPositions;
+      } catch (error) {
+        this.stopAnimation();
       }
-      this.positions = newPositions;
     });
   }
 
