@@ -40,7 +40,7 @@ export class RegistrationPage {
       username: this.username,
       password: this.password,
     };
-    this.appDataService.registerUser(authorities)
+    this.appDataService.autorization.registerUser(authorities)
       .then(this.onRegistrationCompleted)
       .catch(this.onRegistrationError);
   }

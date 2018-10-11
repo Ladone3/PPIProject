@@ -1,4 +1,4 @@
-<div class="ppi-edit-panel" *ngIf="appDataService.authorization && friends">
+<div class="ppi-edit-panel" *ngIf="friends">
   <div class="ppi-edit-panel__header">
     <h2>Friends ({{friends.length}})</h2>
     <button class="ppi-collapse-button" (click)="collapsed=!collapsed">
@@ -10,7 +10,7 @@
       <div class="ppi-friend__image">
         <img [src]="person.image" class="ppi-friend__image"/>
       </div>
-      <span class="ppi-friend__name">{{person.fullName}}</span>
+      <span class="ppi-friend__name">{{person.fullName + ' (' + person.email + ')'}}</span>
       <span class="ppi-friend__buttons">
         <button class="ppi-remove-button" (click)="onRemoveFriend(person)">Remove</button>
       </span>

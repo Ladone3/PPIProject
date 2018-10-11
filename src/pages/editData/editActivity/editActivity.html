@@ -8,9 +8,10 @@
     <input type="text" class="ppi-text-input" [(ngModel)]="activity.name" [disabled]="!onSubmit"/>
     <label>Image</label>
     <input type="text" class="ppi-text-input" [(ngModel)]="activity.image" [disabled]="!onSubmit"/>
-    <widget-edit-places [places]="activity.preferredPlaces"></widget-edit-places>
+    <widget-edit-places [activityId]="activity.id" [places]="activity.preferredPlaces"></widget-edit-places>
     <div *ngIf="onSubmit">
       <div
+        *ngIf="!activity.id"
         class="ppi-submit-button ppi-pull-right"
         (click)="onSubmit(activity)">
         Save

@@ -32,7 +32,7 @@ export class MakingCallPage {
   ) { }
 
   public ionViewWillEnter() {
-    if (!this.appDataService.authorization) {
+    if (!this.appDataService.currentUser) {
       this.navCtrl.push(AuthorizationPage);
     }
     Promise.all([
@@ -48,7 +48,7 @@ export class MakingCallPage {
 
   private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
-    return this.appDataService.getPersonById(personId);
+    return this.appDataService.person.getById(personId);
   }
 
   private async getActivity(): Promise<Activity> {
@@ -56,7 +56,7 @@ export class MakingCallPage {
     if (activityId === EMPTY_ACTIVITY.id) {
       return EMPTY_ACTIVITY;
     }
-    return this.appDataService.getActivityById(activityId);
+    return this.appDataService.activity.getById(activityId);
   }
 
   private async getPlace(): Promise<Place> {
@@ -64,7 +64,7 @@ export class MakingCallPage {
     if (!placeId) {
       return EMPTY_PLACE;
     }
-    return this.appDataService.getPlaceById(placeId);
+    return this.appDataService.place.getById(placeId);
   }
 
   public ionViewDidEnter() {

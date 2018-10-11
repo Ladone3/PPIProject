@@ -1,4 +1,4 @@
-<div class="ppi-edit-panel" *ngIf="appDataService.authorization && activities">
+<div class="ppi-edit-panel" *ngIf="activities">
   <div class="ppi-edit-panel__header">
     <h2>User activities ({{activities.length}})</h2>
     <button class="ppi-collapse-button" (click)="collapsed=!collapsed">
@@ -9,7 +9,7 @@
     <li *ngFor="let activity of activities">
       <widget-edit-activity
         [targetActivity]="activity"
-        [onSubmit]="onUpdateActivity"
+        [onSubmit]="onSaveActivity"
         [onRemove]="onRemoveActivity"
       ></widget-edit-activity>
     </li>

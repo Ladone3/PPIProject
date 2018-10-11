@@ -30,7 +30,7 @@ export class PlacesPage {
   ) { }
 
   public ionViewWillEnter() {
-    if (!this.appDataService.authorization) {
+    if (!this.appDataService.currentUser) {
       this.navCtrl.push(AuthorizationPage);
     }
     
@@ -47,7 +47,7 @@ export class PlacesPage {
 
   private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
-    return this.appDataService.getPersonById(personId);
+    return this.appDataService.person.getById(personId);
   }
 
   public changePerson() {
@@ -61,7 +61,7 @@ export class PlacesPage {
     if (activityId === EMPTY_ACTIVITY.id) {
       return EMPTY_ACTIVITY;
     }
-    return this.appDataService.getActivityById(activityId);
+    return this.appDataService.activity.getById(activityId);
   }
 
   public changeActivity() {
@@ -74,7 +74,7 @@ export class PlacesPage {
     const personId = this.navParams.get('personId');
     const activityId = this.navParams.get('activityId');
     
-    return this.appDataService.getPlaceForActivity(activityId);
+    return this.appDataService.activity.getPlaces(activityId);
   }
 
   public onPlaceClick(event: (MouseEvent | TouchEvent), place: Place | undefined) {

@@ -16,13 +16,15 @@ export class EditDataPage {
   ) { }
 
   public ionViewDidEnter() {
-    if (!this.appDataService.authorization) {
+    const currentUser = this.appDataService.currentUser;
+    if (!currentUser) {
       this.navCtrl.push(AuthorizationPage);
     }
-    this.user = this.appDataService.authorization;
+    this.user = currentUser;
   }
 
   public onSaveUserData(userData: Person) {
-    this.appDataService.updatePerson(userData);
+    this.appDataService.person.update(userData);
+    this.appDataService.currentUser = userData;
   }
 }

@@ -45,14 +45,12 @@ export class ActivitiesPage {
   ) { }
 
   public ionViewDidEnter() {
-    const authorization = this.appDataService.getAuthorization().then(authorization => {
-      if (!authorization) {
-        this.navCtrl.push(AuthorizationPage);
-      }
-    });
+    if (!this.appDataService.currentUser) {
+      this.navCtrl.push(AuthorizationPage);
+    }
     Promise.all([
       this.getPerson(),
-      this.appDataService.getActivities(),
+      this.appDataService.person.getActivities(),
     ]).then(([person, activities]) => {
       const circles = activityToCircle(activities);
       this.setInitialState(circles);
@@ -69,7 +67,7 @@ export class ActivitiesPage {
   private getPerson(): Promise<Person> {
     const personId = this.navParams.get('personId');
     if (personId) {
-      return this.appDataService.getPersonById(personId);
+      return this.appDataService.person.getById(personId);
     } else {
       return undefined;
     }

@@ -16,12 +16,12 @@ export class UserInfo {
   ) { }
 
   public get authorization() {
-    return this.appDataService.authorization;
+    return this.appDataService.currentUser;
   }
 
   public onLogout(event: MouseEvent) {
     event.stopPropagation();
-    this.appDataService.logout().then(() => {
+    this.appDataService.autorization.logout().then(() => {
       this.navCtrl.push(AuthorizationPage);
     });
   }

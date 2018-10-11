@@ -18,7 +18,7 @@ export class MainPage {
   ) { }
 
   public ionViewDidEnter() {
-    if (!this.appDataService.authorization) {
+    if (!this.appDataService.currentUser) {
       this.navCtrl.push(AuthorizationPage);
     }
   }

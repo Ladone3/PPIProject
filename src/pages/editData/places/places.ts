@@ -8,6 +8,7 @@ import { Place } from '../../../models/models';
   templateUrl: 'places.html'
 })
 export class EditPlaces {
+  @Input() activityId: string;
   @Input() places: Place[];
   public newFriendEmail: string;
   public collapsed = true;
@@ -21,10 +22,17 @@ export class EditPlaces {
 
   public onRemovePlace = (place: Place) => {
     this.places = this.places.filter(p => p !== place);
+    this.appDataService.activity.removePlace(this.activityId, place.id);
   }
 
-  public onUpdatePlace (place: Place) {
-    // ...
+  public onSavePlace = (place: Place) => {
+    if (place.id) { // update not implemented
+      // ...
+    } else {
+      this.appDataService.activity.addPlace(this.activityId, place).then(newPlace => {
+        place.id = newPlace.id;
+      });
+    }
   }
 
   public onAddPlace (place: Place) {

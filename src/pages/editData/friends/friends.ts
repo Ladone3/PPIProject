@@ -19,16 +19,21 @@ export class EditFriends implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.appDataService.getPeople().then(people => {
+    this.appDataService.person.getFriends().then(people => {
       this.friends = people;
     });
   }
 
   public onRemoveFriend = (person: Person) => {
     this.friends = this.friends.filter(p => p !== person);
+    this.appDataService.person.removeFriend(person.id);
   }
 
   public onAddFriend () {
-
+    this.appDataService.person.addFriend(this.newFriendEmail).then(newFriend => {
+      if (newFriend) {
+        this.friends.push(newFriend);
+      }
+    });
   }
 }

@@ -45,12 +45,12 @@ export class PeoplePage {
   ) { }
 
   public ionViewDidEnter() {
-    if (!this.appDataService.authorization) {
+    if (!this.appDataService.currentUser) {
       this.navCtrl.push(AuthorizationPage);
     }
     Promise.all([
       this.getActivity(),
-      this.appDataService.getPeople(),
+      this.appDataService.person.getFriends(),
     ]).then(([activity, people]) => {
       const circles = peopleToCircle(people);
       this.setInitialState(circles);
@@ -70,7 +70,7 @@ export class PeoplePage {
       return EMPTY_ACTIVITY;
     }
     if (activityId) {
-      return this.appDataService.getActivityById(activityId);
+      return this.appDataService.activity.getById(activityId);
     } else {
       return undefined;
     }

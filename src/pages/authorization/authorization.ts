@@ -28,7 +28,7 @@ export class AuthorizationPage {
   }
 
   public ionViewDidEnter() {
-    this.appDataService.getAuthorization().then(authorization => {
+    this.appDataService.autorization.getAuthorization().then(authorization => {
       if (authorization) {
         this.onAuthorizationCompleted();
       } else {
@@ -43,7 +43,7 @@ export class AuthorizationPage {
       password: this.password,
       social,
     };
-    this.appDataService.authorize(authorities)
+    this.appDataService.autorization.authorize(authorities)
       .then(this.onAuthorizationCompleted)
       .catch(this.onAuthorizationError);
   }

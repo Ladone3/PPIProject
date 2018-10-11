@@ -10,6 +10,7 @@
     <input type="text" class="ppi-text-input" [(ngModel)]="place.image" [disabled]="!onSubmit"/>
     <div *ngIf="onSubmit">
       <div
+        *ngIf="!place.id"
         class="ppi-submit-button ppi-pull-right"
         (click)="onSubmit(place)">
         Save

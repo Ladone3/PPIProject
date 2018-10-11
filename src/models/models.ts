@@ -18,23 +18,25 @@ export interface Person {
     foreignId?: string;
     email: string;
     surname: string;
-    image: any;
+    image?: any;
     preferredActivities: Activity[];
 }
 
-export type Authorization = Person;
+export interface Authorization extends Person {
+    password?: string;
+};
 
 export interface Place {
     id?: string;
     name: string;
     description?: string;
-    image: string;
+    image?: any;
 }
 
 export interface Activity {
     id?: string;
     name: string;
-    image: string;
+    image?: any;
     description?: string;
     preferredPlaces: Place[];
 }
