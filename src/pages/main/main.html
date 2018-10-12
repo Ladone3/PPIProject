@@ -10,26 +10,26 @@
 <ion-content padding>
   <div class="ppi-main-screen">
 
-    <div class="ppi-main-screen_people">
-      <div class="ppi-circular-button ppi-circular-icon" (click)="moveToPeople()" title="People">
-        <img src="assets/imgs/person.png"/>
-      </div>
+    <widget-people
+      [activity]="activity"
+      (person)="onPersonChanged($event)"
+    ></widget-people>
+    <widget-activities
+      [person]="person"
+      (activity)="onActivityChanged($event)"
+    ></widget-activities>
+    <widget-places
+      [person]="person"
+      [activity]="activity"
+      (place)="onPlaceChanged($event)"
+    ></widget-places>
+
+    <div class="ppi-making-call-button"
+      (click)="onMakeCall()"
+      *ngIf="person && activity && place">
+      <img src="assets/imgs/call-answer-main.png"/>
+      <div class="ppi-making-call-button__name">Phone {{person ? person.name : ''}}</div>
     </div>
 
-    <div class="ppi-greating">
-        <div class="ppi-greating__circle">
-            Let's connect!
-        </div>
-    </div>
-
-    <div class="ppi-main-screen_activities">
-      <div class="ppi-circular-button ppi-circular-icon" (click)="moveToActivities()" title="Activities">
-        <img src="assets/imgs/activities/cycling.png"/>
-      </div>
-    </div>
-
-    <div class="ppi-basket">
-        <img src="assets/imgs/business.png"/>
-    </div>
   </div>
 </ion-content>

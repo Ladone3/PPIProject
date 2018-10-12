@@ -1,4 +1,6 @@
-page-people {
+widget-people {
+    flex-grow: 1;
+    border-right: 1px solid rgba(0, 128, 0, 0.137);
     .ppi-people-screen {
         width: 100%;
         height: 100%;
@@ -6,6 +8,12 @@ page-people {
         box-sizing: border-box;
         overflow: hidden;
         align-items: center;
+
+        .ppi-dnd-button {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+        }
 
         &_people, &_activities {
             z-index: 10;
@@ -20,8 +28,8 @@ page-people {
     } 
 
     .ppi-circle {
-        border: 3px solid rgb(68, 139, 68);
-        background: 3px solid rgb(68, 139, 68);
+        border: none;
+        background: white;
         opacity: 0.8;
     }
 

@@ -1,0 +1,12 @@
+<div #placesList class="ppi-places-screen_places" *ngIf="person && places">
+  <h2>Plese select place you want go to</h2>
+  <div class="ppi-places-screen_places__list">
+    <div class="ppi-place-shadow" *ngFor="let place of places">
+      <div
+        [ngClass]="{ 'ppi-place': true, 'ppi-dragging-circle': place.isDragged, 'ppi-selected-place': selectedPlace === place }"
+        (click)="onPlaceClick($event, place)">
+        <img [src]="place.ref.image"/>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,10 +3,8 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Place } from '../../models/models';
 import { AppDataService, EMPTY_ACTIVITY, EMPTY_PLACE } from '../../services/appDataService';
 import SimpleWebRTC from 'simplewebrtc';
-import { ActivitiesPage } from '../activities/activities';
-import { PlacesPage } from '../places/places';
-import { PeoplePage } from '../people/people';
 import { AuthorizationPage } from '../authorization/authorization';
+import { MainPage } from '../main/main';
 
 @Component({
   selector: 'page-making-call',
@@ -99,21 +97,21 @@ export class MakingCallPage {
   }
 
   public changeActivity() {
-    this.navCtrl.push(ActivitiesPage, {
+    this.navCtrl.push(MainPage, {
       personId: this.person.id,
       placeId: this.place.id,
     });
   }
 
   public changePlace() {
-    this.navCtrl.push(PlacesPage, {
+    this.navCtrl.push(MainPage, {
       personId: this.person.id,
       activityId: this.activity.id,
     });
   }
 
   public changePerson() {
-    this.navCtrl.push(PeoplePage, {
+    this.navCtrl.push(MainPage, {
       activityId: this.activity.id,
       placeId: this.place.id,
     });

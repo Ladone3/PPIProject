@@ -1,0 +1,26 @@
+<div class="ppi-people-screen" (click)="onPersonClick($event, undefined)">
+  <div #activeZone class="ppi-people-screen_people">
+    <div *ngIf="positions">
+      <div
+        *ngFor="let person of people"
+        [id]="person.id"
+        [style.left.px]="positions[person.id].x"
+        [style.top.px]="positions[person.id].y"
+        [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': person.isDragged, 'ppi-selected-circle': (selectedPerson && person.ref.id === selectedPerson.id), 'ppi-blured-circle': isPersonBlured(person.ref) }"
+        (mousedown)="onCircleMouseDown($event, person)"
+        (touchstart)="onCircleMouseDown($event, person)"
+        (click)="onPersonClick($event, person.ref)"
+        >
+        <img [src]="person.image"/>
+        <div class="ppi-circle__name">{{person.ref.fullName}}</div>
+      </div>
+    </div>
+
+    <div
+      #obstacle
+      [ngClass]="{ 'ppi-dnd-button': true, 'ppi-dnd-button-active': this.dragZoneIsActive }"
+      >
+      Who you want to see?
+    </div>
+  </div>
+</div>

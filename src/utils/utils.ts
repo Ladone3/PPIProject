@@ -6,7 +6,7 @@ let idCounter = 0;
 export const MAX_SPEED = 1;
 export const FRAME_RATE = 50;
 export const START_FROM_CYCLE = FRAME_RATE * 3;
-export const CIRCLE_MARGINE = 10;
+export const CIRCLE_MARGINE = 0;
 export const SLOW_MOVE_RATE = 10;
 
 export type Positions = { [id: string]: Vector }; 

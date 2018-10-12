@@ -5,9 +5,9 @@ import { MyApp } from './app.component';
 
 import { AuthorizationPage } from '../pages/authorization/authorization';
 import { MainPage } from '../pages/main/main';
-import { ActivitiesPage } from '../pages/activities/activities';
-import { PeoplePage } from '../pages/people/people';
-import { PlacesPage } from '../pages/places/places';
+import { ActivitiesWidget } from '../widgets/activities/activities';
+import { PeopleWidget } from '../widgets/people/people';
+import { PlacesWidget } from '../widgets/places/places';
 import { MakingCallPage } from '../pages/makingCall/makingCall';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -36,9 +36,9 @@ import { EditPlaceWidget } from '../pages/editData/editPlace/editPlace';
     AuthorizationPage,
     RegistrationPage,
     MainPage,
-    ActivitiesPage,
-    PeoplePage,
-    PlacesPage,
+    ActivitiesWidget,
+    PeopleWidget,
+    PlacesWidget,
     MakingCallPage,
     MyApp,
   ],
@@ -58,9 +58,9 @@ import { EditPlaceWidget } from '../pages/editData/editPlace/editPlace';
     EditPlaceWidget,
     RegistrationPage,
     MainPage,
-    ActivitiesPage,
-    PeoplePage,
-    PlacesPage,
+    ActivitiesWidget,
+    PeopleWidget,
+    PlacesWidget,
     MakingCallPage,
     MyApp,
   ],

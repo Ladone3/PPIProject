@@ -1,0 +1,23 @@
+<div class="ppi-activities-screen" (click)="onActivityClick($event, undefined)">
+  <div #activeZone class="ppi-activities-screen_activities">
+    <div *ngIf="positions">
+      <div
+        *ngFor="let activity of activities"
+        [id]="activity.id"
+        [style.left.px]="positions[activity.id].x"
+        [style.top.px]="positions[activity.id].y"
+        [ngClass]="{ 'ppi-circle': true, 'ppi-dragging-circle': activity.isDragged, 'ppi-selected-circle': (selectedActivity && activity.ref.id === selectedActivity.id), 'ppi-blured-circle': isActivityBlured(activity.ref) }"
+        (mousedown)="onCircleMouseDown($event, activity)"
+        (touchstart)="onCircleMouseDown($event, activity)"
+        (click)="onActivityClick($event, activity.ref)">
+        <img [src]="activity.image"/>
+        <div class="ppi-circle__name-top">{{activity.ref.name}}</div>
+      </div>
+    </div>
+    <div
+      #obstacle
+      [ngClass]="{ 'ppi-dnd-button': true, 'ppi-dnd-button-active': this.dragZoneIsActive }">
+      What do you want to do?
+    </div>
+  </div>
+</div>

@@ -1,10 +1,7 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Person, Activity, Rect, Vector } from '../../models/models';
 import { AppDataService, EMPTY_ACTIVITY } from '../../services/appDataService';
-import { PeoplePage } from '../people/people';
-import { PlacesPage } from '../places/places';
-import { MakingCallPage } from '../makingCall/makingCall';
 import {
   Positions,
   Circle,
@@ -19,19 +16,21 @@ import {
   onDragStart,
   hitTest,
 } from '../../utils/utils';
-import { AuthorizationPage } from '../authorization/authorization';
-
+import { AuthorizationPage } from '../../pages/authorization/authorization';
+import { MakingCallPage } from '../../pages/makingCall/makingCall';
 @Component({
-  selector: 'page-activities',
+  selector: 'widget-activities',
   templateUrl: 'activities.html'
 })
-export class ActivitiesPage {
+export class ActivitiesWidget implements OnInit, OnDestroy, OnChanges {
   @ViewChild('activeZone') activeZone: ElementRef;
   @ViewChild('obstacle') obstacle: ElementRef;
+  @Input() person?: Person;
+  @Output() activity = new EventEmitter<Activity>();
+
   public dragZoneIsActive: boolean = false;
   public positions: Positions;
   public activities: Circle<Activity>[];
-  public person: Person;
   public selectedActivity: Activity;
 
   private obstacleCircle: Circle;
@@ -44,67 +43,52 @@ export class ActivitiesPage {
     public navParams: NavParams,
   ) { }
 
-  public ionViewDidEnter() {
-    if (!this.appDataService.currentUser) {
-      this.navCtrl.push(AuthorizationPage);
-    }
-    Promise.all([
-      this.getPerson(),
-      this.appDataService.person.getActivities(),
-    ]).then(([person, activities]) => {
+  public ngOnInit() {
+    this.getActivities().then(activities => {
       const circles = activityToCircle(activities);
       this.setInitialState(circles);
       this.activities = circles;
-      this.person = person;
-      this.startAnimation();
+      // this.startAnimation();
     }).catch(this.showError);
   }
 
-  public ionViewWillLeave() {
-    this.stopAnimation();
-  }
-
-  private getPerson(): Promise<Person> {
-    const personId = this.navParams.get('personId');
-    if (personId) {
-      return this.appDataService.person.getById(personId);
-    } else {
-      return undefined;
+  public ngOnChanges() {
+    if (this.person && this.selectedActivity) {
+      const activityIsAnavailable = this.person.preferredActivities.map(a => a.id)
+        .indexOf(this.selectedActivity.id) === -1;
+        if (activityIsAnavailable) {
+          setTimeout(() => { // I know It's ugly, but now time to fix it.
+            this.selectedActivity = undefined;
+            this.activity.emit(undefined);
+          }, 200);
+        }
     }
   }
 
-  public changePerson() {
-    this.navCtrl.push(PeoplePage, {});
+  private async getActivities(): Promise<Activity[]> {
+    const friends = await this.appDataService.person.getFriends();
+    let activities: Activity[] = [];
+    for (const person of friends) {
+      activities = activities.concat(person.preferredActivities);
+    }
+    return activities;
+  }
+
+  public isActivityBlured(activity: Activity): boolean {
+    const bluredByPerson = this.person && 
+      this.person.preferredActivities.map(a => a.id).indexOf(activity.id) === -1;
+    const bluredBySelection = this.selectedActivity && this.selectedActivity.id !== activity.id;
+    return bluredByPerson || bluredBySelection;
+  }
+
+  public ngOnDestroy() {
+    this.stopAnimation();
   }
 
   public onActivityClick(event: (MouseEvent | TouchEvent), activity: Activity | undefined) {
     this.selectedActivity = activity;
+    this.activity.emit(activity);
     event.stopPropagation();
-  }
-
-  public onSkip() {
-    this.onSelectActivity(EMPTY_ACTIVITY);
-  }
-
-  public onSelectActivity(activity: Activity) {
-    const placeId = this.navParams.get('placeId');
-    if (!this.person) {
-      this.navCtrl.push(PeoplePage, {
-        activityId: activity.id,
-        placeId: placeId,
-      });
-    } else if (!placeId && activity.id !== EMPTY_ACTIVITY.id) {
-      this.navCtrl.push(PlacesPage, {
-        personId: this.person.id,
-        activityId: activity.id,
-      });
-    } else {
-      this.navCtrl.push(MakingCallPage, {
-        personId: this.person.id,
-        activityId: activity.id,
-        placeId: placeId,
-      });
-    }
   }
 
   public onCircleMouseDown(event: MouseEvent, circle: Circle) {
@@ -129,7 +113,7 @@ export class ActivitiesPage {
     }, () => {
       circle.isDragged = false;
       if (hitTest(circle, this.obstacleCircle)) {
-        this.onSelectActivity(circle.ref);
+        // this.onSelectActivity(circle.ref);
         this.dragZoneIsActive = false;
       }
     });
